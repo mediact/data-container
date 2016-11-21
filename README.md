@@ -41,6 +41,7 @@ $container = $factory->createContainer()
     ->without('some.unset.path');
 
 print_r($container->get('some.path')); // some value
+print_r($container->get('some.unset.path')); // null
 print_r($container->get('some.unset.path', 'default value')); // default value
 
 print_r($container->has('some.path')); // true
