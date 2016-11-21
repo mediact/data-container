@@ -13,7 +13,9 @@ interface DataContainerFactoryInterface
     /**
      * Create a data container.
      *
+     * @param array $data
+     *
      * @return DataContainerInterface
      */
-    public function createContainer(): DataContainerInterface;
+    public function createContainer(array $data = []): DataContainerInterface;
 }

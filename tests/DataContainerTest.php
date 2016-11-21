@@ -8,6 +8,7 @@ namespace Mediact\DataContainer\Tests;
 
 use Mediact\DataContainer\DataContainer;
 use PHPUnit_Framework_TestCase;
+use xmarcos\Dot\Container as DotContainer;
 
 class DataContainerTest extends PHPUnit_Framework_TestCase
 {
@@ -28,6 +29,7 @@ class DataContainerTest extends PHPUnit_Framework_TestCase
      *
      * @param string $path
      * @param mixed  $value
+     * @param array  $data
      *
      * @return void
      *
@@ -35,11 +37,9 @@ class DataContainerTest extends PHPUnit_Framework_TestCase
      *
      * @covers Mediact\DataContainer\DataContainer::has
      */
-    public function testHas(string $path, $value)
+    public function testHas(string $path, $value, array $data)
     {
-        $container = $this->createContainer()
-            ->with($path, $value);
-
+        $container = $this->createContainer($data);
         $this->assertEquals(true, $container->has($path));
         $this->assertEquals(false, $container->has('other.path'));
     }
@@ -49,6 +49,7 @@ class DataContainerTest extends PHPUnit_Framework_TestCase
      *
      * @param string $path
      * @param mixed  $value
+     * @param array  $data
      *
      * @return void
      *
@@ -56,11 +57,9 @@ class DataContainerTest extends PHPUnit_Framework_TestCase
      *
      * @covers Mediact\DataContainer\DataContainer::get
      */
-    public function testGet(string $path, $value)
+    public function testGet(string $path, $value, array $data)
     {
-        $container = $this->createContainer()
-            ->with($path, $value);
-
+        $container = $this->createContainer($data);
         $this->assertEquals($value, $container->get($path));
         $this->assertEquals('other value', $container->get('other.path', 'other value'));
     }
@@ -95,6 +94,7 @@ class DataContainerTest extends PHPUnit_Framework_TestCase
      *
      * @param string $path
      * @param mixed  $value
+     * @param array  $data
      *
      * @return void
      *
@@ -102,10 +102,9 @@ class DataContainerTest extends PHPUnit_Framework_TestCase
      *
      * @covers Mediact\DataContainer\DataContainer::without
      */
-    public function testWithout(string $path, $value)
+    public function testWithout(string $path, $value, array $data)
     {
-        $container = $this->createContainer()
-            ->with($path, $value);
+        $container = $this->createContainer($data);
 
         $this->assertEquals(true, $container->has($path));
         $containerWithout = $container->without($path);
@@ -113,6 +112,19 @@ class DataContainerTest extends PHPUnit_Framework_TestCase
         $this->assertNotSame($container, $containerWithout);
         $this->assertEquals(true, $container->has($path));
         $this->assertEquals(false, $containerWithout->has($path));
+    }
+
+    /**
+     * Test the constructor.
+     *
+     * @return DataContainer
+     *
+     * @covers Mediact\DataContainer\DataContainer::__clone
+     */
+    public function testClone(): DataContainer
+    {
+        $container = $this->createContainer();
+        return clone $container;
     }
 
     /**
@@ -125,13 +137,28 @@ class DataContainerTest extends PHPUnit_Framework_TestCase
         return [
             [
                 'some.path',
-                'some value'
+                'some value',
+                [
+                    'some' => [
+                        'path' => 'some value'
+                    ]
+                ]
             ],
             [
                 'some.other.path',
                 [
                     'some',
                     'values'
+                ],
+                [
+                    'some' => [
+                        'other' => [
+                            'path' => [
+                                'some',
+                                'values'
+                            ]
+                        ]
+                    ]
                 ]
             ]
         ];
@@ -140,10 +167,12 @@ class DataContainerTest extends PHPUnit_Framework_TestCase
     /**
      * Create a data container.
      *
+     * @param array $data
+     *
      * @return DataContainer
      */
-    protected function createContainer(): DataContainer
+    protected function createContainer(array $data = []): DataContainer
     {
-        return new DataContainer();
+        return new DataContainer(new DotContainer($data));
     }
 }

@@ -6,7 +6,7 @@
 
 namespace Mediact\DataContainer;
 
-use xmarcos\Dot\Container;
+use xmarcos\Dot\Container as DotContainer;
 
 /**
  * Contains any data which can be accessed using dot-notation.
@@ -16,16 +16,18 @@ class DataContainer implements DataContainerInterface
     /**
      * The wrapped container used for storage.
      *
-     * @var Container
+     * @var DotContainer
      */
     private $storage;
 
     /**
      * Constructor.
+     *
+     * @param DotContainer $storage
      */
-    public function __construct()
+    public function __construct(DotContainer $storage)
     {
-        $this->storage = new Container();
+        $this->storage = $storage;
     }
 
     /**
@@ -87,7 +89,7 @@ class DataContainer implements DataContainerInterface
      *
      * @return void
      */
-    private function __clone()
+    public function __clone()
     {
         $this->storage = clone $this->storage;
     }
