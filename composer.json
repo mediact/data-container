@@ -23,7 +23,8 @@
         "mediact/coding-standard": "^1.4.0"
     },
     "require": {
-        "php": "^7.0.0"
+        "php": "^7.0.0",
+        "xmarcos/dot-container": "^0.1.0"
     },
     "autoload": {
         "psr-4": {
