@@ -18,7 +18,7 @@ class DataContainerTest extends PHPUnit_Framework_TestCase
      *
      * @covers Mediact\DataContainer\DataContainer::__construct
      */
-    public function testConstructor() : DataContainer
+    public function testConstructor(): DataContainer
     {
         return $this->createContainer();
     }
@@ -142,7 +142,7 @@ class DataContainerTest extends PHPUnit_Framework_TestCase
      *
      * @return DataContainer
      */
-    protected function createContainer() : DataContainer
+    protected function createContainer(): DataContainer
     {
         return new DataContainer();
     }

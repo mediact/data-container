@@ -11,7 +11,7 @@ namespace Mediact\DataContainer;
 interface DataContainerInterface
 {
     /**
-     * Check if a path exists.
+     * Check whether a path exists.
      *
      * @param string $path
      *
@@ -30,7 +30,7 @@ interface DataContainerInterface
     public function get(string $path, $default = null);
 
     /**
-     * Set the value of a path.
+     * Return a container with a value set on a path.
      *
      * @param string $path
      * @param mixed  $value
@@ -40,7 +40,7 @@ interface DataContainerInterface
     public function with(string $path, $value = null): DataContainerInterface;
 
     /**
-     * Delete the value of a path.
+     * Return a container with a path removed.
      *
      * @param string $path
      *

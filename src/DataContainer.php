@@ -29,7 +29,7 @@ class DataContainer implements DataContainerInterface
     }
 
     /**
-     * Check if a path exists.
+     * Check whether a path exists.
      *
      * @param string $path
      *
