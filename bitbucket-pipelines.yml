@@ -1,0 +1,54 @@
+# You can use a Docker image from Docker Hub or your own container
+# registry for your build environment.
+image: phpunit/phpunit:5.3.3
+pipelines:
+  default:
+    - step:
+        script: # Modify the commands below to build your repository.
+          - composer --version
+          - phpunit --version
+          - php -v
+          - php -i | grep xdebug.ini | sed 's/,$//' | xargs rm
+          - mkdir -p $HOME/.ssh
+          - chmod 700 $HOME/.ssh
+          - echo "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC+fkqtDV8tgId6INCumNdpDOT14C3LdiYcVdSKC7om9jIB9KSMzd3+Tq0z5kEl8tWwINAkh5NGmtEd1rp3175TiwQwrncebV9yCWgifC5jENgxIt2XQFFNryYpt10W4KCP9hUXO1IB5IGZQ9+wEDtsX5SVUTRBpovCRwO9iFetSPH7vEVfECe/sxJoq708d5rqydDLHd7fZ6dEBYlkch1IuyjAVxpyEQ2Ny7Xri4FtaJFs57+wrnE1OobN8Fo+eTU/r3LYsGKvw88rk/uHWAONXfvNmRTaxDUGm4ZZJp7gcU/7Kb2Y6BTHi2VHFzT18m43XjbDFEGgasvytnTBfPYF" > $HOME/.ssh/id_rsa.pub
+          - chmod 600 $HOME/.ssh/id_rsa.pub
+          - |
+            cat > $HOME/.ssh/id_rsa << EOT
+            -----BEGIN RSA PRIVATE KEY-----
+            MIIEpAIBAAKCAQEAvn5KrQ1fLYCHeiDQrpjXaQzk9eAty3YmHFXUigu6JvYyAfSk
+            jM3d/k6tM+ZBJfLVsCDQJIeTRprRHda6d9e+U4sEMK53Hm1fcgloInwuYxDYMSLd
+            l0BRTa8mKbddFuCgj/YVFztSAeSBmUPfsBA7bF+UlVE0QaaLwkcDvYhXrUjx+7xF
+            XxAnv7MSaKu9PHea6snQyx3e32enRAWJZHIdSLsowFcachENjcu164uBbWiRbOe/
+            sK5xNTqGzfBaPnk1P69y2LBir8PPK5P7h1gDjV37zZkU2sQ1BpuGWSae4HFP+ym9
+            mOgUx4tlRxc09fJuN142wxRBoGrL8rZ0wXz2BQIDAQABAoIBAQC2+sjwga+zHYsF
+            HRBXJimElwY3yCc1EUB6Z1fJYoplcoeGqWCGgBmFdj2ZZMufkCsDDAHjlPc7Eutc
+            Ji7nfy0rQpW7zVpOt/C+sZp9xZspPbztNfh0mSt/24Zk++VHXG3e2xpXPnv/pWd3
+            uWLc1DrAVu96no37oecNrvlAzf6qS4NtHYs5U0ox2jbkQR8533KX2y3WrNpQKO/m
+            ouvXHtAp+PpNcktGBLLSP3Rez/QPFQjGcwQK2VgJIJ3J6eKb/Q4HeGWcuz/84Oj2
+            wam2p8JI1lc0UKZ3ujcXukuVpV94aOKJClc/mzHCscBWkj46L7uinrXSS9Uvi6Ex
+            wmu3YJ7hAoGBAPwXJEnB6Jnil2T2FTOK2xTzeKG36bPtMsMUN8284QaJsOTSXG56
+            6Zz9s0+gx5LcXtTYtRIntyV4W/qD6q+9azV/sr3/pV1amr4mQaQZXqnvHpzKS6NR
+            J89qZhqjmmlnWlWwkJoJgBFV4gWLG9wUYMJ88E7ACxOk5bACd/FpduY7AoGBAMFy
+            mFbfbgF2zqtnfowOdxeu1+D01v1x6rdsZo/KyfV+nuPVl+6XWGXlfAU4sS5upYD/
+            UBPLRz/ixG27Csmt2oYoIXrzhWwaXsEW2JonJPCqSDhJxNwc+zwO2S1PyAxcVFKL
+            eyzS94J+LCSnUCP3BDHiNRHgnAjQ/xJBGxhecpC/AoGARq4aX4+9rr/IYOdaRGxP
+            Rs2I6hbNsMP1spqNluK5WQLsFQwiHFvb+kdrqgzTSAr/j7/+7Msz346ig1fPSlza
+            nVJjhEAUVltb/apuRxtR3mWL+LwDfxP3DIGxhRCP77OpsVLjCD1XqgShbZp2Qjt4
+            ca9kFUBlGqnmOHZIuOgwDRcCgYEAt2TfvcQ2cxbiWadVVoxEJWSx7ufPhhlgbyJK
+            nVmgW6f+FHsjfaNnv7pu+DhF6YImT4Q8s3dNBekDVhAz6v1yJSuYigqiW9koKaBy
+            Grqvj6WvsAVnp1GmcMqW5Bk1y1og6tynGtiqo8DgMqOYG3CMPop4y4kIBGe22eR1
+            PoYT0NsCgYBPuvksgbmhyO+QxbCFgUG/seB6BwuhX9/jrmbMrTv4MR3fHPNpzWWz
+            rr+oqUpENbP94j+aSPr4j0FEqaMOVigcLqkUfWisCIZnvzlYahUXcKYvJXoTXaDq
+            sLitbEppp7wT+k2VybYp8k26flIDBLa+eTDaSxZL+wguMPPi16kpPA==
+            -----END RSA PRIVATE KEY-----
+            EOT
+          - chmod 600 $HOME/.ssh/id_rsa
+          - echo "Host *\n  PubkeyAuthentication yes" > $HOME/.ssh/config
+          - chmod 600 $HOME/.ssh/config
+          - echo "bitbucket.org,104.192.143.2 ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAubiN81eDcafrgMeLzaFPsw2kNvEcqTKl/VqLat/MaB33pZy0y3rJZtnqwR2qOOvbwKZYKiEO1O6VqNEBxKvJJelCq0dTXWT5pbO2gDXC6h6QDXCaHo6pOHGPUy+YBaGQRGuSusMEASYiWunYN0vCAI8QaXnWMXNMdFP3jHAJH0eDsoiGnLPBlBp4TNm6rYI74nMzgz3B9IikW4WVK+dc8KZJZWYjAuORU3jc1c/NPskD2ASinf8v3xnfXeukU0sJ5N6m5E8VLjObPEO+mN2t/FZTMZLiFqPWc/ALSqnMnnhwrNi2rbfg/rd/IpL8Le3pSBne8+seeFVBoGqzHM9yXw==" >> /root/.ssh/known_hosts
+          - echo '{"http-basic":{"composer.mediact.nl":{"username":"mediact","password":"mediact"}}}' > $COMPOSER_HOME/auth.json
+          - composer install --dev --prefer-dist
+          - phpunit
+          - test -f vendor/mediact/coding-standard/src/MediaCT/phpmd.xml && vendor/bin/phpmd src xml vendor/mediact/coding-standard/src/MediaCT/phpmd.xml
+          - test -f vendor/mediact/coding-standard/src/MediaCT/ruleset.xml && vendor/bin/phpcs --standard=vendor/mediact/coding-standard/src/MediaCT/ruleset.xml src

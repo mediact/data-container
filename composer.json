@@ -1,0 +1,41 @@
+{
+    "name": "mediact/data-container",
+    "type": "library",
+    "description": "Data container library",
+    "license": "proprietary",
+    "authors": [
+        {
+            "name": "Mediact",
+            "email": "contact@mediact.nl"
+        }
+    ],
+    "repositories": [
+        {
+            "type": "composer",
+            "url": "https://composer.mediact.nl"
+        }
+    ],
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "require-dev": {
+        "phpunit/phpunit": "~5.5.3",
+        "raveren/kint": "1.0.*",
+        "mediact/coding-standard": "^1.4.0"
+    },
+    "require": {
+        "php": "^7.0.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Mediact\\DataContainer\\": "src/"
+        }
+    },
+    "archive": {
+        "exclude": [
+            "bitbucket-pipelines.yml",
+            ".gitignore",
+            "phpunit.xml",
+            "tests"
+        ]
+    }
+}
