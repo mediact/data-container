@@ -63,9 +63,7 @@ class DataContainer implements DataContainerInterface
      */
     public function with(string $path, $value = null): DataContainerInterface
     {
-        $container          = clone $this;
-        $container->storage = clone $this->storage;
-
+        $container = clone $this;
         $container->storage->set($path, $value);
         return $container;
     }
@@ -79,10 +77,18 @@ class DataContainer implements DataContainerInterface
      */
     public function without(string $path): DataContainerInterface
     {
-        $container          = clone $this;
-        $container->storage = clone $this->storage;
-
+        $container = clone $this;
         $container->storage->delete($path);
         return $container;
+    }
+
+    /**
+     * Prepare the object for cloning.
+     *
+     * @return void
+     */
+    private function __clone()
+    {
+        $this->storage = clone $this->storage;
     }
 }
