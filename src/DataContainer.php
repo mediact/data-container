@@ -56,6 +56,16 @@ class DataContainer implements DataContainerInterface
     }
 
     /**
+     * Get the contained array.
+     *
+     * @return array
+     */
+    public function all(): array
+    {
+        return $this->storage->getArrayCopy();
+    }
+
+    /**
      * Return a container with a value set on a path.
      *
      * @param string $path

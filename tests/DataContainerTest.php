@@ -65,6 +65,25 @@ class DataContainerTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test all-method.
+     *
+     * @param string $path
+     * @param mixed  $value
+     * @param array  $data
+     *
+     * @return void
+     *
+     * @dataProvider valuesProvider
+     *
+     * @covers Mediact\DataContainer\DataContainer::all
+     */
+    public function testAll(string $path, $value, array $data)
+    {
+        $container = $this->createContainer($data);
+        $this->assertEquals($data, $container->all());
+    }
+
+    /**
      * Test with-method.
      *
      * @param string $path
