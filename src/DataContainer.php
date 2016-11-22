@@ -60,7 +60,7 @@ class DataContainer implements DataContainerInterface
      *
      * @return array
      */
-    public function all()
+    public function all(): array
     {
         return $this->storage->getArrayCopy();
     }

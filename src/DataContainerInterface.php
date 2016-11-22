@@ -34,7 +34,7 @@ interface DataContainerInterface
      *
      * @return array
      */
-    public function all();
+    public function all(): array;
 
     /**
      * Return a container with a value set on a path.
