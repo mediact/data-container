@@ -49,6 +49,6 @@ pipelines:
           - echo "bitbucket.org,104.192.143.2 ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAubiN81eDcafrgMeLzaFPsw2kNvEcqTKl/VqLat/MaB33pZy0y3rJZtnqwR2qOOvbwKZYKiEO1O6VqNEBxKvJJelCq0dTXWT5pbO2gDXC6h6QDXCaHo6pOHGPUy+YBaGQRGuSusMEASYiWunYN0vCAI8QaXnWMXNMdFP3jHAJH0eDsoiGnLPBlBp4TNm6rYI74nMzgz3B9IikW4WVK+dc8KZJZWYjAuORU3jc1c/NPskD2ASinf8v3xnfXeukU0sJ5N6m5E8VLjObPEO+mN2t/FZTMZLiFqPWc/ALSqnMnnhwrNi2rbfg/rd/IpL8Le3pSBne8+seeFVBoGqzHM9yXw==" >> /root/.ssh/known_hosts
           - echo '{"http-basic":{"composer.mediact.nl":{"username":"mediact","password":"mediact"}}}' > $COMPOSER_HOME/auth.json
           - composer install --dev --prefer-dist
-          - phpunit
+          - vendor/bin/phpunit
           - test -f vendor/mediact/coding-standard/src/MediaCT/phpmd.xml && vendor/bin/phpmd src xml vendor/mediact/coding-standard/src/MediaCT/phpmd.xml
           - test -f vendor/mediact/coding-standard/src/MediaCT/ruleset.xml && vendor/bin/phpcs --standard=vendor/mediact/coding-standard/src/MediaCT/ruleset.xml src
