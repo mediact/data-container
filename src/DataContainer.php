@@ -21,13 +21,22 @@ class DataContainer implements DataContainerInterface
     private $storage;
 
     /**
+     * @var ArrayGlobInterface
+     */
+    private $arrayGlob;
+
+    /**
      * Constructor.
      *
-     * @param DotContainer $storage
+     * @param DotContainer       $storage
+     * @param ArrayGlobInterface $arrayGlob
      */
-    public function __construct(DotContainer $storage)
-    {
-        $this->storage = $storage;
+    public function __construct(
+        DotContainer $storage,
+        ArrayGlobInterface $arrayGlob
+    ) {
+        $this->storage   = $storage;
+        $this->arrayGlob = $arrayGlob;
     }
 
     /**
@@ -92,6 +101,22 @@ class DataContainer implements DataContainerInterface
         $container = clone $this;
         $container->storage->delete($path);
         return $container;
+    }
+
+    /**
+     * Find paths that match a pattern.
+     *
+     * @param string $pattern
+     *
+     * @return array
+     */
+    public function glob(string $pattern): array
+    {
+        return $this->arrayGlob
+            ->glob(
+                $this->storage->all(),
+                $pattern
+            );
     }
 
     /**

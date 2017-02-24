@@ -23,7 +23,8 @@ class DataContainerFactory implements DataContainerFactoryInterface
     public function createContainer(array $data = []): DataContainerInterface
     {
         return new DataContainer(
-            new DotContainer($data)
+            new DotContainer($data),
+            new ArrayGlob('.')
         );
     }
 }
