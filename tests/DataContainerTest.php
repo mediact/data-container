@@ -6,10 +6,14 @@
 
 namespace Mediact\DataContainer\Tests;
 
+use Mediact\DataContainer\ArrayGlobInterface;
 use Mediact\DataContainer\DataContainer;
 use PHPUnit_Framework_TestCase;
 use xmarcos\Dot\Container as DotContainer;
 
+/**
+ * @coversDefaultClass \Mediact\DataContainer\DataContainer
+ */
 class DataContainerTest extends PHPUnit_Framework_TestCase
 {
     /**
@@ -17,7 +21,7 @@ class DataContainerTest extends PHPUnit_Framework_TestCase
      *
      * @return DataContainer
      *
-     * @covers Mediact\DataContainer\DataContainer::__construct
+     * @covers ::__construct
      */
     public function testConstructor(): DataContainer
     {
@@ -35,7 +39,7 @@ class DataContainerTest extends PHPUnit_Framework_TestCase
      *
      * @dataProvider valuesProvider
      *
-     * @covers Mediact\DataContainer\DataContainer::has
+     * @covers ::has
      */
     public function testHas(string $path, $value, array $data)
     {
@@ -55,7 +59,7 @@ class DataContainerTest extends PHPUnit_Framework_TestCase
      *
      * @dataProvider valuesProvider
      *
-     * @covers Mediact\DataContainer\DataContainer::get
+     * @covers ::get
      */
     public function testGet(string $path, $value, array $data)
     {
@@ -75,7 +79,7 @@ class DataContainerTest extends PHPUnit_Framework_TestCase
      *
      * @dataProvider valuesProvider
      *
-     * @covers Mediact\DataContainer\DataContainer::all
+     * @covers ::all
      */
     public function testAll(string $path, $value, array $data)
     {
@@ -93,7 +97,7 @@ class DataContainerTest extends PHPUnit_Framework_TestCase
      *
      * @dataProvider valuesProvider
      *
-     * @covers Mediact\DataContainer\DataContainer::with
+     * @covers ::with
      */
     public function testWith(string $path, $value)
     {
@@ -119,7 +123,7 @@ class DataContainerTest extends PHPUnit_Framework_TestCase
      *
      * @dataProvider valuesProvider
      *
-     * @covers Mediact\DataContainer\DataContainer::without
+     * @covers ::without
      */
     public function testWithout(string $path, $value, array $data)
     {
@@ -138,7 +142,7 @@ class DataContainerTest extends PHPUnit_Framework_TestCase
      *
      * @return DataContainer
      *
-     * @covers Mediact\DataContainer\DataContainer::__clone
+     * @covers ::__clone
      */
     public function testClone(): DataContainer
     {
@@ -147,11 +151,36 @@ class DataContainerTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * @return void
+     *
+     * @covers ::glob
+     */
+    public function testGlob()
+    {
+        $data    = ['some_data'];
+        $pattern = 'some_pattern';
+        $result  = ['some_result'];
+
+        $glob = $this->createMock(ArrayGlobInterface::class);
+        $glob
+            ->expects($this->once())
+            ->method('glob')
+            ->with($data, $pattern)
+            ->willReturn($result);
+
+        $container = new DataContainer(new DotContainer($data), $glob);
+        $this->assertEquals(
+            $result,
+            $container->glob($pattern)
+        );
+    }
+
+    /**
      * Values for the tests.
      *
      * @return array
      */
-    public function valuesProvider()
+    public function valuesProvider(): array
     {
         return [
             [
@@ -192,6 +221,9 @@ class DataContainerTest extends PHPUnit_Framework_TestCase
      */
     protected function createContainer(array $data = []): DataContainer
     {
-        return new DataContainer(new DotContainer($data));
+        return new DataContainer(
+            new DotContainer($data),
+            $this->createMock(ArrayGlobInterface::class)
+        );
     }
 }
