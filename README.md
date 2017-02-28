@@ -52,5 +52,5 @@ print_r($container->get('some.unset.path', 'default value')); // default value
 print_r($container->has('some.path')); // true
 print_r($container->has('some.unset.path')); // false
 
-print_r($container->glob('*.path')); // ['some_path']
+print_r($container->glob('*.path')); // ['some.path']
 ```
