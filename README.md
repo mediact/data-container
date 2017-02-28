@@ -27,6 +27,11 @@ DataContainerInterface {
      * Return a container with a path removed.
      */
     public function without(string $path): DataContainerInterface;
+
+    /**
+     * Find paths that match a pattern.
+     */
+    public function glob(string $pattern): array;
 }
 ```
 
@@ -46,4 +51,6 @@ print_r($container->get('some.unset.path', 'default value')); // default value
 
 print_r($container->has('some.path')); // true
 print_r($container->has('some.unset.path')); // false
+
+print_r($container->glob('*.path')); // ['some.path']
 ```

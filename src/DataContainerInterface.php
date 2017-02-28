@@ -54,4 +54,13 @@ interface DataContainerInterface
      * @return DataContainerInterface
      */
     public function without(string $path): DataContainerInterface;
+
+    /**
+     * Find paths that match a pattern.
+     *
+     * @param string $pattern
+     *
+     * @return array
+     */
+    public function glob(string $pattern): array;
 }
