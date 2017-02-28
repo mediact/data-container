@@ -6,29 +6,29 @@
 namespace Mediact\DataContainer\Tests;
 
 use PHPUnit_Framework_TestCase;
-use Mediact\DataContainer\ArrayGlob;
+use Mediact\DataContainer\ArrayGlobber;
 
 /**
- * @coversDefaultClass \Mediact\DataContainer\ArrayGlob
+ * @coversDefaultClass \Mediact\DataContainer\ArrayGlobber
  */
 class ArrayGlobTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * @return ArrayGlob
+     * @return ArrayGlobber
      *
      * @covers ::__construct
      */
-    public function testConstructor(): ArrayGlob
+    public function testConstructor(): ArrayGlobber
     {
-        return new ArrayGlob('.');
+        return new ArrayGlobber('.');
     }
 
     /**
      * @depends testConstructor
      *
-     * @param array     $input
-     * @param array     $expected
-     * @param ArrayGlob $glob
+     * @param array        $input
+     * @param array        $expected
+     * @param ArrayGlobber $glob
      *
      * @return void
      *
@@ -40,7 +40,7 @@ class ArrayGlobTest extends PHPUnit_Framework_TestCase
     public function testGlob(
         array $input,
         array $expected,
-        ArrayGlob $glob
+        ArrayGlobber $glob
     ) {
         foreach ($expected as $pattern => $result) {
             $this->assertEquals(

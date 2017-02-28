@@ -8,7 +8,7 @@ namespace Mediact\DataContainer;
 /**
  * Finds paths in arrays.
  */
-class ArrayGlob implements ArrayGlobInterface
+class ArrayGlobber implements ArrayGlobberInterface
 {
     /**
      * @var string

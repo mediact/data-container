@@ -24,7 +24,7 @@ class DataContainerFactory implements DataContainerFactoryInterface
     {
         return new DataContainer(
             new DotContainer($data),
-            new ArrayGlob('.')
+            new ArrayGlobber('.')
         );
     }
 }

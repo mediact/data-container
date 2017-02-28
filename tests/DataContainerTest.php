@@ -6,7 +6,7 @@
 
 namespace Mediact\DataContainer\Tests;
 
-use Mediact\DataContainer\ArrayGlobInterface;
+use Mediact\DataContainer\ArrayGlobberInterface;
 use Mediact\DataContainer\DataContainer;
 use PHPUnit_Framework_TestCase;
 use xmarcos\Dot\Container as DotContainer;
@@ -161,7 +161,7 @@ class DataContainerTest extends PHPUnit_Framework_TestCase
         $pattern = 'some_pattern';
         $result  = ['some_result'];
 
-        $glob = $this->createMock(ArrayGlobInterface::class);
+        $glob = $this->createMock(ArrayGlobberInterface::class);
         $glob
             ->expects($this->once())
             ->method('glob')
@@ -223,7 +223,7 @@ class DataContainerTest extends PHPUnit_Framework_TestCase
     {
         return new DataContainer(
             new DotContainer($data),
-            $this->createMock(ArrayGlobInterface::class)
+            $this->createMock(ArrayGlobberInterface::class)
         );
     }
 }

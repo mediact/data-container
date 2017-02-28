@@ -8,7 +8,7 @@ namespace Mediact\DataContainer;
 /**
  * Finds paths in arrays.
  */
-interface ArrayGlobInterface
+interface ArrayGlobberInterface
 {
     /**
      * Find the paths in an array that match a pattern.

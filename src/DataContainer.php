@@ -21,19 +21,19 @@ class DataContainer implements DataContainerInterface
     private $storage;
 
     /**
-     * @var ArrayGlobInterface
+     * @var ArrayGlobberInterface
      */
     private $arrayGlob;
 
     /**
      * Constructor.
      *
-     * @param DotContainer       $storage
-     * @param ArrayGlobInterface $arrayGlob
+     * @param DotContainer          $storage
+     * @param ArrayGlobberInterface $arrayGlob
      */
     public function __construct(
         DotContainer $storage,
-        ArrayGlobInterface $arrayGlob
+        ArrayGlobberInterface $arrayGlob
     ) {
         $this->storage   = $storage;
         $this->arrayGlob = $arrayGlob;
