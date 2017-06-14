@@ -8,9 +8,9 @@ namespace Mediact\DataContainer\Tests;
 
 use Mediact\DataContainer\DataContainerFactory;
 use Mediact\DataContainer\DataContainerInterface;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class DataContainerFactoryTest extends PHPUnit_Framework_TestCase
+class DataContainerFactoryTest extends TestCase
 {
     /**
      * Test creating a container.

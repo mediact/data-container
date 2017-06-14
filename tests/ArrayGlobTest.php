@@ -5,13 +5,13 @@
  */
 namespace Mediact\DataContainer\Tests;
 
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use Mediact\DataContainer\ArrayGlobber;
 
 /**
  * @coversDefaultClass \Mediact\DataContainer\ArrayGlobber
  */
-class ArrayGlobTest extends PHPUnit_Framework_TestCase
+class ArrayGlobTest extends TestCase
 {
     /**
      * @return ArrayGlobber

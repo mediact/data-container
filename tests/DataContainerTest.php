@@ -8,13 +8,13 @@ namespace Mediact\DataContainer\Tests;
 
 use Mediact\DataContainer\ArrayGlobberInterface;
 use Mediact\DataContainer\DataContainer;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use xmarcos\Dot\Container as DotContainer;
 
 /**
  * @coversDefaultClass \Mediact\DataContainer\DataContainer
  */
-class DataContainerTest extends PHPUnit_Framework_TestCase
+class DataContainerTest extends TestCase
 {
     /**
      * Test the constructor.
