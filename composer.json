@@ -23,7 +23,9 @@
   "prefer-stable": true,
   "require": {
     "php": "^7.0",
-    "xmarcos/dot-container": "^0.1"
+    "xmarcos/dot-container": "^0.1",
+    "symfony/serializer": "^3.3.2",
+    "league/flysystem": "^1.0.9"
   },
   "require-dev": {
     "phpunit/phpunit": "@stable",
