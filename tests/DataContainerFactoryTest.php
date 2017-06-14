@@ -10,18 +10,25 @@ use Mediact\DataContainer\DataContainerFactory;
 use Mediact\DataContainer\DataContainerInterface;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @coversDefaultClass Mediact\DataContainer\DataContainerFactory
+ */
 class DataContainerFactoryTest extends TestCase
 {
     /**
      * Test creating a container.
      *
-     * @return DataContainerInterface
+     * @return void
      *
-     * @covers Mediact\DataContainer\DataContainerFactory::createContainer
+     * @covers ::createContainer
      */
-    public function testCreateContainer(): DataContainerInterface
+    public function testCreateContainer()
     {
         $factory = new DataContainerFactory();
-        return $factory->createContainer();
+
+        $this->assertInstanceOf(
+            DataContainerInterface::class,
+            $factory->createContainer()
+        );
     }
 }

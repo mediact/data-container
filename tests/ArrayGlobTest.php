@@ -20,7 +20,11 @@ class ArrayGlobTest extends TestCase
      */
     public function testConstructor(): ArrayGlobber
     {
-        return new ArrayGlobber('.');
+        $globber = new ArrayGlobber('.');
+
+        $this->assertInstanceOf(ArrayGlobber::class, $globber);
+
+        return $globber;
     }
 
     /**

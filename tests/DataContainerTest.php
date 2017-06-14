@@ -25,7 +25,11 @@ class DataContainerTest extends TestCase
      */
     public function testConstructor(): DataContainer
     {
-        return $this->createContainer();
+        $container = $this->createContainer();
+
+        $this->assertInstanceOf(DataContainer::class, $container);
+
+        return $container;
     }
 
     /**
@@ -147,7 +151,11 @@ class DataContainerTest extends TestCase
     public function testClone(): DataContainer
     {
         $container = $this->createContainer();
-        return clone $container;
+        $clone     = clone $container;
+
+        $this->assertInstanceOf(DataContainer::class, $clone);
+
+        return $clone;
     }
 
     /**
