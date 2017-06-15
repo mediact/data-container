@@ -1,42 +1,61 @@
 {
-    "name": "mediact/data-container",
-    "type": "library",
-    "description": "Data container library",
-    "license": "proprietary",
-    "authors": [
-        {
-            "name": "Mediact",
-            "email": "contact@mediact.nl"
-        }
-    ],
-    "repositories": [
-        {
-            "type": "composer",
-            "url": "https://composer.mediact.nl"
-        }
-    ],
-    "minimum-stability": "dev",
-    "prefer-stable": true,
-    "require-dev": {
-        "phpunit/phpunit": "^5.5",
-        "raveren/kint": "^1.0",
-        "mediact/coding-standard": "^1.5"
+  "name": "mediact/data-container",
+  "type": "library",
+  "description": "Data container library",
+  "license": "proprietary",
+  "authors": [
+    {
+      "name": "Mediact",
+      "email": "contact@mediact.nl"
     },
-    "require": {
-        "php": "^7.0",
-        "xmarcos/dot-container": "^0.1"
-    },
-    "autoload": {
-        "psr-4": {
-            "Mediact\\DataContainer\\": "src/"
-        }
-    },
-    "archive": {
-        "exclude": [
-            "bitbucket-pipelines.yml",
-            ".gitignore",
-            "phpunit.xml",
-            "tests"
-        ]
+    {
+      "name": "Jan-Marten de Boer",
+      "role": "developer"
     }
+  ],
+  "repositories": [
+    {
+      "type": "composer",
+      "url": "https://composer.mediact.nl"
+    }
+  ],
+  "minimum-stability": "stable",
+  "prefer-stable": true,
+  "require": {
+    "php": "^7.0",
+    "xmarcos/dot-container": "^0.1",
+    "symfony/serializer": "^3.3.2",
+    "league/flysystem": "^1.0.9"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "@stable",
+    "kint-php/kint": "@stable",
+    "mediact/testing-suite": "@stable"
+  },
+  "autoload": {
+    "psr-4": {
+      "Mediact\\DataContainer\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Mediact\\DataContainer\\Tests\\": "tests/"
+    }
+  },
+  "archive": {
+    "exclude": [
+      "bitbucket-pipelines.yml",
+      ".gitignore",
+      "phpunit.xml",
+      "phpmd.xml",
+      "phpcs.xml",
+      "phpstan.neon",
+      "tests"
+    ]
+  },
+  "extra": {
+    "grumphp": {
+      "config-default-path": "vendor/mediact/testing-suite/config/default/grumphp.yml"
+    }
+  }
 }
