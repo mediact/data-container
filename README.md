@@ -17,6 +17,11 @@ interface DataContainerInterface {
      * Get a value of a path.
      */
     public function get(string $path, mixed $default = null): mixed;
+    
+    /**
+     * Branch into a list of data containers.
+     */
+    public function branch(string $path): array;
 
     /**
      * Return a container with a value set on a path.
@@ -100,4 +105,28 @@ The following will be in the resulting data container:
 /** @var \Mediact\DataContainer\DataContainerInterface $container */
 
 print_r($container->get('foo.bar')); // baz
+```
+
+# Branching data
+
+In certain cases, the data container may hold nested structures with children,
+of which the data structure is also preferred as a data container.
+
+In that case, a branch can be used:
+
+```php
+<?php
+/** @var \Mediact\DataContainer\DataContainerFactoryInterface $factory */
+$container = $factory->createContainer(
+    [
+        'categories' => [
+            'foo' => ['name' => 'Foo'],
+            'bar' => ['name' => 'Bar']
+        ]
+    ]
+);
+
+foreach ($container->branch('categories.*') as $category) {
+    var_dump($category->get('name'));
+}
 ```
