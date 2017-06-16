@@ -50,7 +50,8 @@
       "phpmd.xml",
       "phpcs.xml",
       "phpstan.neon",
-      "tests"
+      "tests",
+      "example"
     ]
   },
   "extra": {

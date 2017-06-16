@@ -8,6 +8,7 @@ namespace Mediact\DataContainer\Tests;
 
 use Mediact\DataContainer\ArrayGlobberInterface;
 use Mediact\DataContainer\DataContainer;
+use Mediact\DataContainer\DataContainerInterface;
 use PHPUnit\Framework\TestCase;
 use xmarcos\Dot\Container as DotContainer;
 
@@ -181,6 +182,34 @@ class DataContainerTest extends TestCase
             $result,
             $container->glob($pattern)
         );
+    }
+
+    /**
+     * @return void
+     * @covers ::branch
+     */
+    public function testBranch()
+    {
+        $pattern = 'some_pattern';
+        $path    = 'some_path';
+        $result  = [$path];
+        $data    = [$path => ['some_key' => 'some_data']];
+
+        $glob = $this->createMock(ArrayGlobberInterface::class);
+        $glob
+            ->expects($this->once())
+            ->method('glob')
+            ->with($data, $pattern)
+            ->willReturn($result);
+
+        $container = new DataContainer(new DotContainer($data), $glob);
+        $branches  = $container->branch($pattern);
+
+        $this->assertCount(1, $branches);
+
+        foreach ($branches as $branch) {
+            $this->assertInstanceOf(DataContainerInterface::class, $branch);
+        }
     }
 
     /**
