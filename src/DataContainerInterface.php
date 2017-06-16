@@ -30,6 +30,15 @@ interface DataContainerInterface
     public function get(string $path, $default = null);
 
     /**
+     * Branch into a list of data containers.
+     *
+     * @param string $pattern
+     *
+     * @return DataContainerInterface[]
+     */
+    public function branch(string $pattern): array;
+
+    /**
      * Get the contained array.
      *
      * @return array

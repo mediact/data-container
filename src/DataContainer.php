@@ -65,6 +65,31 @@ class DataContainer implements DataContainerInterface
     }
 
     /**
+     * Branch into a list of data containers.
+     *
+     * @param string $pattern
+     *
+     * @return DataContainerInterface[]
+     */
+    public function branch(string $pattern): array
+    {
+        return array_map(
+            function (array $data) : DataContainerInterface {
+                return new static(
+                    new DotContainer($data),
+                    $this->arrayGlob
+                );
+            },
+            array_map(
+                function (string $path) : array {
+                    return (array)$this->get($path, []);
+                },
+                $this->glob($pattern)
+            )
+        );
+    }
+
+    /**
      * Get the contained array.
      *
      * @return array
