@@ -6,261 +6,575 @@
 
 namespace Mediact\DataContainer\Tests;
 
-use Mediact\DataContainer\ArrayGlobberInterface;
 use Mediact\DataContainer\DataContainer;
 use Mediact\DataContainer\DataContainerInterface;
 use PHPUnit\Framework\TestCase;
-use xmarcos\Dot\Container as DotContainer;
 
 /**
  * @coversDefaultClass \Mediact\DataContainer\DataContainer
+ *
+ * @SuppressWarnings(PHPMD.TooManyPublicMethods)
  */
 class DataContainerTest extends TestCase
 {
     /**
-     * Test the constructor.
-     *
-     * @return DataContainer
+     * @return void
      *
      * @covers ::__construct
      */
-    public function testConstructor(): DataContainer
+    public function testConstructor()
     {
-        $container = $this->createContainer();
-
-        $this->assertInstanceOf(DataContainer::class, $container);
-
-        return $container;
-    }
-
-    /**
-     * Test has-method.
-     *
-     * @param string $path
-     * @param mixed  $value
-     * @param array  $data
-     *
-     * @return void
-     *
-     * @dataProvider valuesProvider
-     *
-     * @covers ::has
-     */
-    public function testHas(string $path, $value, array $data)
-    {
-        $container = $this->createContainer($data);
-        $this->assertEquals(true, $container->has($path));
-        $this->assertEquals(false, $container->has('other.path'));
-    }
-
-    /**
-     * Test get-method.
-     *
-     * @param string $path
-     * @param mixed  $value
-     * @param array  $data
-     *
-     * @return void
-     *
-     * @dataProvider valuesProvider
-     *
-     * @covers ::get
-     */
-    public function testGet(string $path, $value, array $data)
-    {
-        $container = $this->createContainer($data);
-        $this->assertEquals($value, $container->get($path));
-        $this->assertEquals('other value', $container->get('other.path', 'other value'));
-    }
-
-    /**
-     * Test all-method.
-     *
-     * @param string $path
-     * @param mixed  $value
-     * @param array  $data
-     *
-     * @return void
-     *
-     * @dataProvider valuesProvider
-     *
-     * @covers ::all
-     */
-    public function testAll(string $path, $value, array $data)
-    {
-        $container = $this->createContainer($data);
-        $this->assertEquals($data, $container->all());
-    }
-
-    /**
-     * Test with-method.
-     *
-     * @param string $path
-     * @param mixed  $value
-     *
-     * @return void
-     *
-     * @dataProvider valuesProvider
-     *
-     * @covers ::with
-     */
-    public function testWith(string $path, $value)
-    {
-        $container = $this->createContainer();
-
-        $this->assertEquals(false, $container->has($path));
-        $containerWith = $container->with($path, $value);
-
-        $this->assertNotSame($container, $containerWith);
-        $this->assertEquals(false, $container->has($path));
-        $this->assertEquals(true, $containerWith->has($path));
-        $this->assertEquals($value, $containerWith->get($path));
-    }
-
-    /**
-     * Test without-method.
-     *
-     * @param string $path
-     * @param mixed  $value
-     * @param array  $data
-     *
-     * @return void
-     *
-     * @dataProvider valuesProvider
-     *
-     * @covers ::without
-     */
-    public function testWithout(string $path, $value, array $data)
-    {
-        $container = $this->createContainer($data);
-
-        $this->assertEquals(true, $container->has($path));
-        $containerWithout = $container->without($path);
-
-        $this->assertNotSame($container, $containerWithout);
-        $this->assertEquals(true, $container->has($path));
-        $this->assertEquals(false, $containerWithout->has($path));
-    }
-
-    /**
-     * Test cloning.
-     *
-     * @return DataContainer
-     *
-     * @covers ::__clone
-     */
-    public function testClone(): DataContainer
-    {
-        $container = $this->createContainer();
-        $clone     = clone $container;
-
-        $this->assertInstanceOf(DataContainer::class, $clone);
-
-        return $clone;
-    }
-
-    /**
-     * @return void
-     *
-     * @covers ::glob
-     */
-    public function testGlob()
-    {
-        $data    = ['some_data'];
-        $pattern = 'some_pattern';
-        $result  = ['some_result'];
-
-        $glob = $this->createMock(ArrayGlobberInterface::class);
-        $glob
-            ->expects($this->once())
-            ->method('glob')
-            ->with($data, $pattern)
-            ->willReturn($result);
-
-        $container = new DataContainer(new DotContainer($data), $glob);
-        $this->assertEquals(
-            $result,
-            $container->glob($pattern)
+        $this->assertInstanceOf(
+            DataContainer::class,
+            new DataContainer()
         );
     }
 
     /**
+     * @param array  $data
+     * @param string $path
+     * @param bool   $expected
+     *
      * @return void
-     * @covers ::branch
+     *
+     * @dataProvider hasDataProvider
+     *
+     * @covers ::has
+     * @covers ::parsePath
      */
-    public function testBranch()
+    public function testHas(array $data, string $path, bool $expected)
     {
-        $pattern = 'some_pattern';
-        $path    = 'some_path';
-        $result  = [$path];
-        $data    = [$path => ['some_key' => 'some_data']];
-
-        $glob = $this->createMock(ArrayGlobberInterface::class);
-        $glob
-            ->expects($this->once())
-            ->method('glob')
-            ->with($data, $pattern)
-            ->willReturn($result);
-
-        $container = new DataContainer(new DotContainer($data), $glob);
-        $branches  = $container->branch($pattern);
-
-        $this->assertCount(1, $branches);
-
-        foreach ($branches as $branch) {
-            $this->assertInstanceOf(DataContainerInterface::class, $branch);
-        }
+        $container = new DataContainer($data);
+        $this->assertEquals($expected, $container->has($path));
     }
 
     /**
-     * Values for the tests.
-     *
      * @return array
      */
-    public function valuesProvider(): array
+    public function hasDataProvider(): array
     {
         return [
             [
-                'some.path',
-                'some value',
-                [
-                    'some' => [
-                        'path' => 'some value'
-                    ]
-                ]
+                $this->valuesProvider(),
+                'foo',
+                true
             ],
             [
-                'some.other.path',
-                [
-                    'some',
-                    'values'
-                ],
-                [
-                    'some' => [
-                        'other' => [
-                            'path' => [
-                                'some',
-                                'values'
-                            ]
-                        ]
-                    ]
-                ]
+                $this->valuesProvider(),
+                'foo.baz.qux',
+                true
+            ],
+            [
+                $this->valuesProvider(),
+                'foo.baz.quux.1',
+                true
+            ],
+            [
+                $this->valuesProvider(),
+                'foo.baz.quux.4',
+                false
+            ],
+            [
+                [],
+                'foo',
+                false
+            ],
+            [
+                [],
+                'foo.bar',
+                false
             ]
         ];
     }
 
     /**
-     * Create a data container.
+     * @param array  $data
+     * @param string $path
+     * @param mixed  $default
+     * @param mixed  $expected
      *
+     * @return void
+     *
+     * @dataProvider getDataProvider
+     *
+     * @covers ::get
+     * @covers ::parsePath
+     */
+    public function testGet(array $data, string $path, $default, $expected)
+    {
+        $container = new DataContainer($data);
+        $this->assertEquals($expected, $container->get($path, $default));
+    }
+
+    /**
+     * @return array
+     */
+    public function getDataProvider(): array
+    {
+        return [
+            [
+                $this->valuesProvider(),
+                'foo',
+                'some_default',
+                $this->valuesProvider()['foo']
+            ],
+            [
+                $this->valuesProvider(),
+                'foo.baz.qux',
+                'some_default',
+                $this->valuesProvider()['foo']['baz']['qux']
+            ],
+            [
+                $this->valuesProvider(),
+                'foo.baz.quux.1',
+                'some_default',
+                $this->valuesProvider()['foo']['baz']['quux'][1]
+            ],
+            [
+                $this->valuesProvider(),
+                'foo.baz.quuux',
+                'some_default',
+                'some_default'
+            ],
+            [
+                [],
+                'foo',
+                ['some_default'],
+                ['some_default']
+            ],
+            [
+                [],
+                'foo.bar',
+                ['some_default'],
+                ['some_default']
+            ]
+        ];
+    }
+
+    /**
      * @param array $data
      *
-     * @return DataContainer
+     * @return void
+     *
+     * @dataProvider allDataProvider
+     *
+     * @covers ::all
      */
-    protected function createContainer(array $data = []): DataContainer
+    public function testAll(array $data)
     {
-        return new DataContainer(
-            new DotContainer($data),
-            $this->createMock(ArrayGlobberInterface::class)
+        $container = new DataContainer($data);
+        $this->assertEquals($data, $container->all());
+    }
+
+    /**
+     * @return array
+     */
+    public function allDataProvider(): array
+    {
+        return [
+            [
+                $this->valuesProvider()
+            ]
+        ];
+    }
+
+    /**
+     * @param array  $data
+     * @param string $path
+     * @param mixed  $value
+     * @param array  $expected
+     *
+     * @return void
+     *
+     * @dataProvider setDataProvider
+     *
+     * @covers ::set
+     * @covers ::getNodeReference
+     */
+    public function testSet(array $data, string $path, $value, array $expected)
+    {
+        $container = new DataContainer($data);
+        $container->set($path, $value);
+        $this->assertEquals($expected, $container->all());
+    }
+
+    /**
+     * @return array
+     */
+    public function setDataProvider(): array
+    {
+        $valuesA = $valuesB = $valuesC = $valuesD = $this->valuesProvider();
+
+        $valuesA['foo']                   = 'new_value';
+        $valuesB['foo']['baz']['qux']     = 'new_value';
+        $valuesC['foo']['baz']['quux'][1] = 'new_value';
+        $valuesD['quux']['quuux']['foo']  = 'new_value';
+
+        return [
+            [
+                $this->valuesProvider(),
+                'foo',
+                'new_value',
+                $valuesA
+            ],
+            [
+                $this->valuesProvider(),
+                'foo.baz.qux',
+                'new_value',
+                $valuesB
+            ],
+            [
+                $this->valuesProvider(),
+                'foo.baz.quux.1',
+                'new_value',
+                $valuesC
+            ],
+            [
+                $this->valuesProvider(),
+                'quux.quuux.foo',
+                'new_value',
+                $valuesD
+            ]
+        ];
+    }
+
+    /**
+     * @param array  $data
+     * @param string $pattern
+     * @param array  $expected
+     *
+     * @return void
+     *
+     * @dataProvider removeDataProvider
+     *
+     * @covers ::remove
+     * @covers ::getNodeReference
+     */
+    public function testRemove(array $data, string $pattern, array $expected)
+    {
+        $container = new DataContainer($data);
+        $container->remove($pattern);
+        $this->assertEquals($expected, $container->all());
+    }
+
+    /**
+     * @return array
+     */
+    public function removeDataProvider(): array
+    {
+        $valuesA = $valuesB = $valuesC = $valuesD = $this->valuesProvider();
+
+        unset($valuesA['foo']);
+        unset($valuesB['foo']['baz']['qux']);
+        unset($valuesB['foo']['baz']['quux']);
+        unset($valuesC['foo']['baz']['quux'][1]);
+
+        return [
+            [
+                $this->valuesProvider(),
+                'foo',
+                $valuesA
+            ],
+            [
+                $this->valuesProvider(),
+                'foo.baz.*',
+                $valuesB
+            ],
+            [
+                $this->valuesProvider(),
+                'foo.baz.quux.1',
+                $valuesC
+            ],
+            [
+                $this->valuesProvider(),
+                'quux.quuux.foo',
+                $valuesD
+            ]
+        ];
+    }
+
+    /**
+     * @param array  $data
+     * @param string $pattern
+     * @param array  $expected
+     *
+     * @return void
+     *
+     * @dataProvider globDataProvider
+     *
+     * @covers ::glob
+     * @covers ::findArrayPathsByPatterns
+     */
+    public function testGlob(array $data, string $pattern, array $expected)
+    {
+        $container = new DataContainer($data);
+
+        $this->assertEquals(
+            $expected,
+            $container->glob($pattern)
         );
+    }
+
+    /**
+     * @return array
+     */
+    public function globDataProvider(): array
+    {
+        return [
+            [
+                $this->valuesProvider(),
+                'foo',
+                ['foo']
+            ],
+            [
+                $this->valuesProvider(),
+                '*',
+                ['foo', 'bar', 'baz', 'qux', 'quux']
+            ],
+            [
+                $this->valuesProvider(),
+                'foo.ba*.*',
+                ['foo.baz.qux', 'foo.baz.quux']
+            ],
+            [
+                $this->valuesProvider(),
+                'foo.ba?.*x',
+                ['foo.baz.qux', 'foo.baz.quux']
+            ],
+            [
+                $this->valuesProvider(),
+                '*o.baz',
+                ['foo.baz']
+            ],
+            [
+                $this->valuesProvider(),
+                'quux.*',
+                ['quux.0', 'quux.1', 'quux.2']
+            ]
+        ];
+    }
+
+    /**
+     * @param array  $data
+     * @param string $pattern
+     * @param array  $expected
+     *
+     * @return void
+     *
+     * @dataProvider branchDataProvider
+     *
+     * @covers ::branch
+     */
+    public function testBranch(array $data, string $pattern, array $expected)
+    {
+        $container = new DataContainer($data);
+        $result    = $container->branch($pattern);
+
+        $this->assertContainsOnlyInstancesOf(DataContainer::class, $result);
+        $this->assertEquals(
+            $expected,
+            array_map(
+                function (DataContainerInterface $branch) : array {
+                    return $branch->all();
+                },
+                $result
+            )
+        );
+    }
+
+    /**
+     * @return array
+     */
+    public function branchDataProvider(): array
+    {
+        return [
+            [
+                $this->valuesProvider(),
+                'foo',
+                [$this->valuesProvider()['foo']]
+            ],
+            [
+                $this->valuesProvider(),
+                'foo.baz',
+                [$this->valuesProvider()['foo']['baz']]
+            ],
+            [
+                $this->valuesProvider(),
+                'foo.*',
+                [
+                    [$this->valuesProvider()['foo']['bar']],
+                    $this->valuesProvider()['foo']['baz']
+                ]
+            ],
+            [
+                $this->valuesProvider(),
+                'quux',
+                [$this->valuesProvider()['quux']]
+            ]
+        ];
+    }
+
+    /**
+     * @param array  $data
+     * @param string $pattern
+     * @param string $destination
+     * @param array  $expected
+     *
+     * @return void
+     *
+     * @dataProvider copyDataProvider
+     *
+     * @covers ::copy
+     */
+    public function testCopy(
+        array $data,
+        string $pattern,
+        string $destination,
+        array $expected
+    ) {
+        $container = new DataContainer($data);
+        $container->copy($pattern, $destination);
+        $this->assertEquals($expected, $container->all());
+    }
+
+    /**
+     * @return array
+     */
+    public function copyDataProvider(): array
+    {
+        $valuesA = $valuesB = $valuesC = $valuesD = $this->valuesProvider();
+
+        $valuesA['quuux']        = $valuesA['foo'];
+        $valuesB['quuux']['baz'] = $valuesB['foo']['baz']['qux'];
+        $valuesC['foo']          = $valuesC['foo']['baz']['quux'];
+        $valuesD['foo']          = $valuesD['quux'][2];
+
+        return [
+            [
+                $this->valuesProvider(),
+                'foo',
+                'quuux',
+                $valuesA
+            ],
+            [
+                $this->valuesProvider(),
+                'foo.*.qux',
+                'quuux.$1',
+                $valuesB
+            ],
+            [
+                $this->valuesProvider(),
+                'foo.baz.quux',
+                'foo',
+                $valuesC
+            ],
+            [
+                $this->valuesProvider(),
+                'quux.*',
+                'foo',
+                $valuesD
+            ]
+        ];
+    }
+
+    /**
+     * @param array  $data
+     * @param string $pattern
+     * @param string $destination
+     * @param array  $expected
+     *
+     * @return void
+     *
+     * @dataProvider moveDataProvider
+     *
+     * @covers ::move
+     */
+    public function testMove(
+        array $data,
+        string $pattern,
+        string $destination,
+        array $expected
+    ) {
+        $container = new DataContainer($data);
+        $container->move($pattern, $destination);
+        $this->assertEquals($expected, $container->all());
+    }
+
+    /**
+     * @return array
+     */
+    public function moveDataProvider(): array
+    {
+        $valuesA = $valuesB = $valuesC = $valuesD = $this->valuesProvider();
+
+        $valuesA['quuux'] = $valuesA['foo'];
+        unset($valuesA['foo']);
+
+        $valuesB['quuux']['baz'] = $valuesB['foo']['baz']['qux'];
+        unset($valuesB['foo']['baz']['qux']);
+
+        $valuesC['foo'] = $valuesC['foo']['baz']['quux'];
+        unset($valuesC['foo']['baz']['quux']);
+
+        $valuesD['foo']['qux'] = $valuesD['foo'];
+
+        return [
+            [
+                $this->valuesProvider(),
+                'foo',
+                'quuux',
+                $valuesA
+            ],
+            [
+                $this->valuesProvider(),
+                'foo.*.qux',
+                'quuux.$1',
+                $valuesB
+            ],
+            [
+                $this->valuesProvider(),
+                'foo.baz.quux',
+                'foo',
+                $valuesC
+            ],
+            [
+                $this->valuesProvider(),
+                'foo',
+                'foo.qux',
+                $valuesD
+            ]
+        ];
+    }
+
+
+    /**
+     * @return array
+     */
+    private function valuesProvider(): array
+    {
+        return [
+            'foo' => [
+                'bar' => 'foo_bar_value',
+                'baz' => [
+                    'qux' => null,
+                    'quux' => [
+                        'foo',
+                        'bar',
+                        'baz'
+                    ]
+                ]
+            ],
+            'bar' => [
+                'baz' => 'bar_baz_value',
+                'qux' => 'bar_qux_value'
+            ],
+            'baz' => 'baz_value',
+            'qux' => null,
+            'quux' => [
+                'foo',
+                'bar',
+                'baz'
+            ]
+        ];
     }
 }

@@ -3,6 +3,7 @@
  * Copyright MediaCT. All rights reserved.
  * https://www.mediact.nl
  */
+
 namespace Mediact\DataContainer;
 
 /**
@@ -17,5 +18,5 @@ interface DataContainerFactoryInterface
      *
      * @return DataContainerInterface
      */
-    public function createContainer(array $data = []): DataContainerInterface;
+    public function create(array $data = []): DataContainerInterface;
 }

@@ -6,29 +6,27 @@
 
 namespace Mediact\DataContainer\Tests;
 
-use Mediact\DataContainer\DataContainerFactory;
-use Mediact\DataContainer\DataContainerInterface;
+use Mediact\DataContainer\DataContainer;
 use PHPUnit\Framework\TestCase;
+use Mediact\DataContainer\DataContainerFactory;
 
 /**
- * @coversDefaultClass Mediact\DataContainer\DataContainerFactory
+ * @coversDefaultClass \Mediact\DataContainer\DataContainerFactory
  */
 class DataContainerFactoryTest extends TestCase
 {
     /**
-     * Test creating a container.
-     *
      * @return void
      *
-     * @covers ::createContainer
+     * @covers ::create
      */
-    public function testCreateContainer()
+    public function testCreate()
     {
-        $factory = new DataContainerFactory();
+        $data      = ['some_data'];
+        $factory   = new DataContainerFactory();
+        $container = $factory->create($data);
 
-        $this->assertInstanceOf(
-            DataContainerInterface::class,
-            $factory->createContainer()
-        );
+        $this->assertInstanceOf(DataContainer::class, $container);
+        $this->assertEquals($data, $container->all());
     }
 }
