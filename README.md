@@ -109,7 +109,7 @@ var_dump($container->get('categories.qux')); // ['name' => 'Foo']
 ```
 
 The copy method supports wildcards. The matches of the wildcards can be used
-in the destination in a similar way as in pre_replace().
+in the destination in a similar way as in preg_replace().
 
 ```php
 <?php
