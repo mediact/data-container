@@ -6,8 +6,6 @@
 
 namespace Mediact\DataContainer;
 
-use xmarcos\Dot\Container as DotContainer;
-
 /**
  * Creates data containers.
  */
@@ -20,11 +18,8 @@ class DataContainerFactory implements DataContainerFactoryInterface
      *
      * @return DataContainerInterface
      */
-    public function createContainer(array $data = []): DataContainerInterface
+    public function create(array $data = []): DataContainerInterface
     {
-        return new DataContainer(
-            new DotContainer($data),
-            new ArrayGlobber('.')
-        );
+        return new DataContainer($data);
     }
 }
