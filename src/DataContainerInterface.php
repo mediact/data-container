@@ -3,6 +3,7 @@
  * Copyright MediaCT. All rights reserved.
  * https://www.mediact.nl
  */
+
 namespace Mediact\DataContainer;
 
 /**
@@ -10,6 +11,11 @@ namespace Mediact\DataContainer;
  */
 interface DataContainerInterface
 {
+    /**
+     * The separator used in paths.
+     */
+    const SEPARATOR = '.';
+
     /**
      * Check whether a path exists.
      *
@@ -30,6 +36,41 @@ interface DataContainerInterface
     public function get(string $path, $default = null);
 
     /**
+     * Get the contained array.
+     *
+     * @return array
+     */
+    public function all(): array;
+
+    /**
+     * Set a value on a path.
+     *
+     * @param string $path
+     * @param mixed  $value
+     *
+     * @return void
+     */
+    public function set(string $path, $value = null);
+
+    /**
+     * Remove a path if it exists.
+     *
+     * @param string $pattern
+     *
+     * @return void
+     */
+    public function remove(string $pattern);
+
+    /**
+     * Find paths that match a pattern.
+     *
+     * @param string $pattern
+     *
+     * @return string[]
+     */
+    public function glob(string $pattern): array;
+
+    /**
      * Branch into a list of data containers.
      *
      * @param string $pattern
@@ -39,37 +80,22 @@ interface DataContainerInterface
     public function branch(string $pattern): array;
 
     /**
-     * Get the contained array.
-     *
-     * @return array
-     */
-    public function all(): array;
-
-    /**
-     * Return a container with a value set on a path.
-     *
-     * @param string $path
-     * @param mixed  $value
-     *
-     * @return DataContainerInterface
-     */
-    public function with(string $path, $value = null): DataContainerInterface;
-
-    /**
-     * Return a container with a path removed.
-     *
-     * @param string $path
-     *
-     * @return DataContainerInterface
-     */
-    public function without(string $path): DataContainerInterface;
-
-    /**
-     * Find paths that match a pattern.
+     * Copy paths matching a pattern to another path.
      *
      * @param string $pattern
+     * @param string $destination
      *
-     * @return array
+     * @return void
      */
-    public function glob(string $pattern): array;
+    public function copy(string $pattern, string $destination);
+
+    /**
+     * Move paths matching a pattern to another path.
+     *
+     * @param string $pattern
+     * @param string $destination
+     *
+     * @return void
+     */
+    public function move(string $pattern, string $destination);
 }
