@@ -10,7 +10,7 @@ require_once __DIR__ . '/../vendor/autoload.php';
 
 $factory = new DataContainerFactory();
 
-$container = $factory->createContainer(
+$container = $factory->create(
     [
         'categories' => [
             'foo' => ['name' => 'Foo'],
