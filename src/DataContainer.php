@@ -128,7 +128,7 @@ class DataContainer implements DataContainerInterface
     public function expand(string $pattern, string $replacement): array
     {
         $matches = $this->glob($pattern);
-        $regex   = $this->getGlobRegex($pattern, static::SEPARATOR);
+        $regex   = $this->getGlobRegex($pattern);
         return array_combine(
             $matches,
             array_map(
@@ -322,16 +322,14 @@ class DataContainer implements DataContainerInterface
      * Get regex pattern for a glob pattern.
      *
      * @param string $pattern
-     * @param string $separator
      *
      * @return string
      */
     private function getGlobRegex(
-        string $pattern,
-        string $separator
+        string $pattern
     ): string {
         $transforms = [
-            '\*'   => '([^' . preg_quote($separator, '#') . ']*)',
+            '\*'   => '([^' . preg_quote(static::SEPARATOR, '#') . ']*)',
             '\?'   => '(.)',
             '\[\!' => '([^',
             '\['   => '([',
