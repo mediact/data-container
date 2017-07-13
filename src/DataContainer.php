@@ -305,7 +305,7 @@ class DataContainer implements DataContainerInterface
     ): string {
         if (preg_match($regex, $match, $matches)) {
             $replacement = preg_replace_callback(
-                '/\$([\d]*)/',
+                '/\$([\d]+)/',
                 function (array $match) use ($matches) {
                     return array_key_exists($match[1], $matches)
                         ? $matches[$match[1]]
