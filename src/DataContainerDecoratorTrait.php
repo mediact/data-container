@@ -127,6 +127,20 @@ trait DataContainerDecoratorTrait
     }
 
     /**
+     * Find paths that match a pattern an their replacements.
+     *
+     * @param string $pattern
+     * @param string $replacement
+     *
+     * @return string[]
+     */
+    public function expand(string $pattern, string $replacement): array
+    {
+        return $this->getStorage()
+            ->expand($pattern, $replacement);
+    }
+
+    /**
      * Branch into a list of data containers.
      *
      * @param string $pattern
@@ -143,27 +157,27 @@ trait DataContainerDecoratorTrait
      * Copy paths matching a pattern to another path.
      *
      * @param string $pattern
-     * @param string $destination
+     * @param string $replacement
      *
      * @return void
      */
-    public function copy(string $pattern, string $destination)
+    public function copy(string $pattern, string $replacement)
     {
         $this->getStorage()
-            ->copy($pattern, $destination);
+            ->copy($pattern, $replacement);
     }
 
     /**
      * Move paths matching a pattern to another path.
      *
      * @param string $pattern
-     * @param string $destination
+     * @param string $replacement
      *
      * @return void
      */
-    public function move(string $pattern, string $destination)
+    public function move(string $pattern, string $replacement)
     {
         $this->getStorage()
-            ->move($pattern, $destination);
+            ->move($pattern, $replacement);
     }
 }

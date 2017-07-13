@@ -86,6 +86,20 @@ var_dump($container->glob('categories.ba?'));    // ['categories.bar']
 var_dump($container->glob('categories.ba[zr]')); // ['categories.bar']
 ```
 
+## Getting paths and their replacements with expand()
+
+The expand method returns a list of paths that match the given pattern and also
+returns their replacements. The replacement can contain variables in a similar
+way as preg_replace.
+
+```php
+<?php
+/** @var Mediact\DataContainer\DataContainer $container */
+var_dump($container->expand('categories.f*', 'cat.f$1'));      // ['categories.foo' => 'cat.foo']
+var_dump($container->expand('categories.?a?', 'cat.$1a$2'));   // ['categories.bar' => 'cat.bar']
+var_dump($container->expand('categories.ba[zr]', 'cat.ba$2')); // ['categories.bar' => 'cat.bar']
+```
+
 ## Getting branches that match a pattern with branch()
 
 The branch method returns the paths that are matched by a pattern as a list of
@@ -108,8 +122,8 @@ $container->copy('categories.foo', 'categories.qux');
 var_dump($container->get('categories.qux')); // ['name' => 'Foo']
 ```
 
-The copy method supports wildcards. The matches of the wildcards can be used
-in the destination in a similar way as in preg_replace().
+The copy method supports wildcards. The replacement can contain variables like
+used in expand().
 
 ```php
 <?php
@@ -129,7 +143,8 @@ var_dump($container->has('categories.foo')); // false
 var_dump($container->get('categories.qux')); // ['name' => 'Foo']
 ```
 
-The move methods supports wildcards just like the copy method.
+The move method supports wildcards. The replacement can contain variables like
+used in expand().
 
 ```php
 <?php
@@ -174,3 +189,26 @@ class BarDataContainer implements DataContainerInterface
 ```
 
 Both implementations contain all methods of `DataContainerInterface`.
+
+## Creating a traversable decorator
+
+A decorator that is also traversable can be created with 
+`DataContainerIteratorAggregateTrait`.
+
+```php
+<?php
+use Mediact\DataContainer\DataContainerInterface;
+use Mediact\DataContainer\DataContainerDecoratorTrait;
+use Mediact\DataContainer\DataContainerIteratorAggregateTrait;
+
+class FooTraversableDataContainer implements DataContainerInterface, IteratorAggregate
+{
+    use DataContainerDecoratorTrait;
+    use DataContainerIteratorAggregateTrait;
+
+    public function __construct(array $data = [])
+    {
+        $this->setData($data);
+    }
+}
+```

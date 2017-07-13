@@ -8,7 +8,7 @@ namespace Mediact\DataContainer\Tests;
 
 use Mediact\DataContainer\DataContainer;
 use Mediact\DataContainer\DataContainerInterface;
-use Mediact\DataContainer\Tests\TestDouble\DataContainerDecoratorDouble;
+use Mediact\DataContainer\Tests\TestDouble\DataContainerImplementationDouble;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -28,7 +28,7 @@ class DataContainerDecoratorTraitTest extends TestCase
     {
         $data = ['some_data'];
 
-        $double = new DataContainerDecoratorDouble();
+        $double = new DataContainerImplementationDouble();
         $double->pokeData($data);
         $this->assertEquals($data, $double->peekStorage()->all());
     }
@@ -43,7 +43,7 @@ class DataContainerDecoratorTraitTest extends TestCase
     {
         $storage = $this->createMock(DataContainerInterface::class);
 
-        $double = new DataContainerDecoratorDouble($storage);
+        $double = new DataContainerImplementationDouble($storage);
         $this->assertSame($storage, $double->peekStorage());
     }
 
@@ -63,7 +63,7 @@ class DataContainerDecoratorTraitTest extends TestCase
             ->with($path)
             ->willReturn($result);
 
-        $double = new DataContainerDecoratorDouble($storage);
+        $double = new DataContainerImplementationDouble($storage);
         $this->assertEquals($result, $double->has($path));
     }
 
@@ -83,7 +83,7 @@ class DataContainerDecoratorTraitTest extends TestCase
             ->with($path)
             ->willReturn($result);
 
-        $double = new DataContainerDecoratorDouble($storage);
+        $double = new DataContainerImplementationDouble($storage);
         $this->assertEquals($result, $double->get($path));
     }
 
@@ -101,7 +101,7 @@ class DataContainerDecoratorTraitTest extends TestCase
             ->method('all')
             ->willReturn($result);
 
-        $double = new DataContainerDecoratorDouble($storage);
+        $double = new DataContainerImplementationDouble($storage);
         $this->assertEquals($result, $double->all());
     }
 
@@ -120,7 +120,7 @@ class DataContainerDecoratorTraitTest extends TestCase
             ->method('set')
             ->with($path, $value);
 
-        $double = new DataContainerDecoratorDouble($storage);
+        $double = new DataContainerImplementationDouble($storage);
         $double->set($path, $value);
     }
 
@@ -138,7 +138,7 @@ class DataContainerDecoratorTraitTest extends TestCase
             ->method('remove')
             ->with($pattern);
 
-        $double = new DataContainerDecoratorDouble($storage);
+        $double = new DataContainerImplementationDouble($storage);
         $double->remove($pattern);
     }
 
@@ -158,8 +158,30 @@ class DataContainerDecoratorTraitTest extends TestCase
             ->with($pattern)
             ->willReturn($result);
 
-        $double = new DataContainerDecoratorDouble($storage);
+        $double = new DataContainerImplementationDouble($storage);
         $this->assertEquals($result, $double->glob($pattern));
+    }
+
+    /**
+     * @return void
+     *
+     * @covers ::expand
+     */
+    public function testExpand()
+    {
+        $pattern     = 'foo.bar.*';
+        $replacement = 'foo.baz.$1';
+        $result      = ['foo.bar.baz' => 'foo.baz.baz'];
+
+        $storage = $this->createMock(DataContainerInterface::class);
+        $storage
+            ->expects(self::once())
+            ->method('expand')
+            ->with($pattern, $replacement)
+            ->willReturn($result);
+
+        $double = new DataContainerImplementationDouble($storage);
+        $this->assertEquals($result, $double->expand($pattern, $replacement));
     }
 
     /**
@@ -178,7 +200,7 @@ class DataContainerDecoratorTraitTest extends TestCase
             ->with($pattern)
             ->willReturn($result);
 
-        $double = new DataContainerDecoratorDouble($storage);
+        $double = new DataContainerImplementationDouble($storage);
         $this->assertEquals($result, $double->branch($pattern));
     }
 
@@ -197,7 +219,7 @@ class DataContainerDecoratorTraitTest extends TestCase
             ->method('copy')
             ->with($pattern, $destination);
 
-        $double = new DataContainerDecoratorDouble($storage);
+        $double = new DataContainerImplementationDouble($storage);
         $double->copy($pattern, $destination);
     }
 
@@ -216,7 +238,7 @@ class DataContainerDecoratorTraitTest extends TestCase
             ->method('move')
             ->with($pattern, $destination);
 
-        $double = new DataContainerDecoratorDouble($storage);
+        $double = new DataContainerImplementationDouble($storage);
         $double->move($pattern, $destination);
     }
 }
