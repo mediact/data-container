@@ -6,13 +6,16 @@
 
 namespace Mediact\DataContainer\Tests\TestDouble;
 
+use IteratorAggregate;
 use Mediact\DataContainer\DataContainer;
 use Mediact\DataContainer\DataContainerDecoratorTrait;
 use Mediact\DataContainer\DataContainerInterface;
+use Mediact\DataContainer\DataContainerIteratorAggregateTrait;
 
-class DataContainerDecoratorDouble implements DataContainerInterface
+class DataContainerImplementationDouble implements DataContainerInterface, IteratorAggregate
 {
     use DataContainerDecoratorTrait;
+    use DataContainerIteratorAggregateTrait;
 
     /**
      * Constructor.
