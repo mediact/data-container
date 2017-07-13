@@ -189,3 +189,26 @@ class BarDataContainer implements DataContainerInterface
 ```
 
 Both implementations contain all methods of `DataContainerInterface`.
+
+## Creating a traversable decorator
+
+A decorator that is also traversable can be created with 
+`DataContainerIteratorAggregateTrait`.
+
+```php
+<?php
+use Mediact\DataContainer\DataContainerInterface;
+use Mediact\DataContainer\DataContainerDecoratorTrait;
+use Mediact\DataContainer\DataContainerIteratorAggregateTrait;
+
+class FooTraversableDataContainer implements DataContainerInterface, IteratorAggregate
+{
+    use DataContainerDecoratorTrait;
+    use DataContainerIteratorAggregateTrait;
+
+    public function __construct(array $data = [])
+    {
+        $this->setData($data);
+    }
+}
+```
