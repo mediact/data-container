@@ -357,6 +357,72 @@ class DataContainerTest extends TestCase
     /**
      * @param array  $data
      * @param string $pattern
+     * @param string $replacement
+     * @param array  $expected
+     *
+     * @return void
+     *
+     * @dataProvider expandDataProvider
+     *
+     * @covers ::expand
+     * @covers ::replaceByRegex
+     * @covers ::getGlobRegex
+     */
+    public function testExpand(
+        array $data,
+        string $pattern,
+        string $replacement,
+        array $expected
+    ) {
+        $container = new DataContainer($data);
+        $this->assertEquals(
+            $expected,
+            $container->expand($pattern, $replacement)
+        );
+    }
+
+    /**
+     * @return array
+     */
+    public function expandDataProvider(): array
+    {
+        return [
+            [
+                $this->valuesProvider(),
+                'foo',
+                'bar',
+                ['foo' => 'bar']
+            ],
+            [
+                $this->valuesProvider(),
+                'foo.*',
+                'bar.$1',
+                ['foo.bar' => 'bar.bar', 'foo.baz' => 'bar.baz']
+            ],
+            [
+                $this->valuesProvider(),
+                'foo.ba?',
+                'bar.ba$1',
+                ['foo.bar' => 'bar.bar', 'foo.baz' => 'bar.baz']
+            ],
+            [
+                $this->valuesProvider(),
+                'foo.ba[rz]',
+                'bar.ba$1',
+                ['foo.bar' => 'bar.bar', 'foo.baz' => 'bar.baz']
+            ],
+            [
+                $this->valuesProvider(),
+                'foo.*',
+                'qux.$0',
+                ['foo.bar' => 'qux.foo.bar', 'foo.baz' => 'qux.foo.baz']
+            ]
+        ];
+    }
+
+    /**
+     * @param array  $data
+     * @param string $pattern
      * @param array  $expected
      *
      * @return void
@@ -417,7 +483,7 @@ class DataContainerTest extends TestCase
     /**
      * @param array  $data
      * @param string $pattern
-     * @param string $destination
+     * @param string $replacement
      * @param array  $expected
      *
      * @return void
@@ -429,11 +495,11 @@ class DataContainerTest extends TestCase
     public function testCopy(
         array $data,
         string $pattern,
-        string $destination,
+        string $replacement,
         array $expected
     ) {
         $container = new DataContainer($data);
-        $container->copy($pattern, $destination);
+        $container->copy($pattern, $replacement);
         $this->assertEquals($expected, $container->all());
     }
 
@@ -480,7 +546,7 @@ class DataContainerTest extends TestCase
     /**
      * @param array  $data
      * @param string $pattern
-     * @param string $destination
+     * @param string $replacement
      * @param array  $expected
      *
      * @return void
@@ -492,11 +558,11 @@ class DataContainerTest extends TestCase
     public function testMove(
         array $data,
         string $pattern,
-        string $destination,
+        string $replacement,
         array $expected
     ) {
         $container = new DataContainer($data);
-        $container->move($pattern, $destination);
+        $container->move($pattern, $replacement);
         $this->assertEquals($expected, $container->all());
     }
 

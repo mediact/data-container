@@ -11,8 +11,6 @@ namespace Mediact\DataContainer;
  */
 class DataContainer implements DataContainerInterface
 {
-    use GlobReplacementTrait;
-
     /** @var array */
     private $data;
 
@@ -120,6 +118,29 @@ class DataContainer implements DataContainerInterface
     }
 
     /**
+     * Find paths that match a pattern an their replacements.
+     *
+     * @param string $pattern
+     * @param string $replacement
+     *
+     * @return string[]
+     */
+    public function expand(string $pattern, string $replacement): array
+    {
+        $matches = $this->glob($pattern);
+        $regex   = $this->getGlobRegex($pattern, static::SEPARATOR);
+        return array_combine(
+            $matches,
+            array_map(
+                function ($match) use ($regex, $replacement) {
+                    return $this->replaceByRegex($regex, $match, $replacement);
+                },
+                $matches
+            )
+        );
+    }
+
+    /**
      * Branch into a list of data containers.
      *
      * @param string $pattern
@@ -145,22 +166,15 @@ class DataContainer implements DataContainerInterface
      * Copy paths matching a pattern to another path.
      *
      * @param string $pattern
-     * @param string $destination
+     * @param string $replacement
      *
      * @return void
      */
-    public function copy(string $pattern, string $destination)
+    public function copy(string $pattern, string $replacement)
     {
-        foreach ($this->glob($pattern) as $source) {
-            $this->set(
-                $this->getGlobReplacement(
-                    $pattern,
-                    $source,
-                    $destination,
-                    static::SEPARATOR
-                ),
-                $this->get($source)
-            );
+        $expanded = $this->expand($pattern, $replacement);
+        foreach ($expanded as $source => $destination) {
+            $this->set($destination, $this->get($source));
         }
     }
 
@@ -168,21 +182,15 @@ class DataContainer implements DataContainerInterface
      * Move paths matching a pattern to another path.
      *
      * @param string $pattern
-     * @param string $destination
+     * @param string $replacement
      *
      * @return void
      */
-    public function move(string $pattern, string $destination)
+    public function move(string $pattern, string $replacement)
     {
-        foreach ($this->glob($pattern) as $source) {
-            $destination = $this->getGlobReplacement(
-                $pattern,
-                $source,
-                $destination,
-                static::SEPARATOR
-            );
-
-            if ($destination !== $source) {
+        $expanded = $this->expand($pattern, $replacement);
+        foreach ($expanded as $source => $destination) {
+            if ($source !== $destination) {
                 $this->set($destination, $this->get($source));
                 if (strpos($destination, $source . static::SEPARATOR) !== 0) {
                     $this->remove($source);
@@ -279,5 +287,60 @@ class DataContainer implements DataContainerInterface
         }
 
         return $paths;
+    }
+
+    /**
+     * Get a replacement for pattern that has been matched by glob.
+     *
+     * @param string $regex
+     * @param string $match
+     * @param string $replacement
+     *
+     * @return string
+     */
+    private function replaceByRegex(
+        string $regex,
+        string $match,
+        string $replacement
+    ): string {
+        if (preg_match($regex, $match, $matches)) {
+            $replacement = preg_replace_callback(
+                '/\$([\d]*)/',
+                function (array $match) use ($matches) {
+                    return array_key_exists($match[1], $matches)
+                        ? $matches[$match[1]]
+                        : $match[0];
+                },
+                $replacement
+            );
+        }
+
+        return $replacement;
+    }
+
+    /**
+     * Get regex pattern for a glob pattern.
+     *
+     * @param string $pattern
+     * @param string $separator
+     *
+     * @return string
+     */
+    private function getGlobRegex(
+        string $pattern,
+        string $separator
+    ): string {
+        $transforms = [
+            '\*'   => '([^' . preg_quote($separator, '#') . ']*)',
+            '\?'   => '(.)',
+            '\[\!' => '([^',
+            '\['   => '([',
+            '\]'   => '])'
+        ];
+
+        return sprintf(
+            '#^%s$#',
+            strtr(preg_quote($pattern, '#'), $transforms)
+        );
     }
 }

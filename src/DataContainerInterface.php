@@ -71,6 +71,16 @@ interface DataContainerInterface
     public function glob(string $pattern): array;
 
     /**
+     * Find paths that match a pattern an their replacements.
+     *
+     * @param string $pattern
+     * @param string $replacement
+     *
+     * @return string[]
+     */
+    public function expand(string $pattern, string $replacement): array;
+
+    /**
      * Branch into a list of data containers.
      *
      * @param string $pattern
@@ -83,19 +93,19 @@ interface DataContainerInterface
      * Copy paths matching a pattern to another path.
      *
      * @param string $pattern
-     * @param string $destination
+     * @param string $replacement
      *
      * @return void
      */
-    public function copy(string $pattern, string $destination);
+    public function copy(string $pattern, string $replacement);
 
     /**
      * Move paths matching a pattern to another path.
      *
      * @param string $pattern
-     * @param string $destination
+     * @param string $replacement
      *
      * @return void
      */
-    public function move(string $pattern, string $destination);
+    public function move(string $pattern, string $replacement);
 }
