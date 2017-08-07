@@ -207,6 +207,26 @@ class DataContainerDecoratorTraitTest extends TestCase
     /**
      * @return void
      *
+     * @covers ::node
+     */
+    public function testNode()
+    {
+        $path    = 'foo.bar';
+        $result  = $this->createMock(DataContainerInterface::class);
+        $storage = $this->createMock(DataContainerInterface::class);
+        $storage
+            ->expects(self::once())
+            ->method('node')
+            ->with($path)
+            ->willReturn($result);
+
+        $double = new DataContainerImplementationDouble($storage);
+        $this->assertSame($result, $double->node($path));
+    }
+
+    /**
+     * @return void
+     *
      * @covers ::copy
      */
     public function testCopy()

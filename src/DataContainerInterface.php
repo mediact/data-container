@@ -90,6 +90,15 @@ interface DataContainerInterface
     public function branch(string $pattern): array;
 
     /**
+     * Get a node from the container.
+     *
+     * @param string $path
+     *
+     * @return DataContainerInterface
+     */
+    public function node(string $path): DataContainerInterface;
+
+    /**
      * Copy paths matching a pattern to another path.
      *
      * @param string $pattern
