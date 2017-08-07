@@ -163,6 +163,23 @@ class DataContainer implements DataContainerInterface
     }
 
     /**
+     * Get a node from the container.
+     *
+     * @param string $path
+     *
+     * @return DataContainerInterface
+     */
+    public function node(string $path): DataContainerInterface
+    {
+        $data = $this->get($path, []);
+        return new static(
+            is_array($data)
+                ? $data
+                : []
+        );
+    }
+
+    /**
      * Copy paths matching a pattern to another path.
      *
      * @param string $pattern

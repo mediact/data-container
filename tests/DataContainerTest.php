@@ -482,6 +482,55 @@ class DataContainerTest extends TestCase
 
     /**
      * @param array  $data
+     * @param string $path
+     * @param array  $expected
+     *
+     * @return void
+     *
+     * @dataProvider nodeDataProvider
+     *
+     * @covers ::node
+     */
+    public function testNode(array $data, string $path, array $expected)
+    {
+        $container = new DataContainer($data);
+        $result    = $container->node($path);
+
+        $this->assertInstanceOf(DataContainer::class, $result);
+        $this->assertEquals($expected, $result->all());
+    }
+
+    /**
+     * @return array
+     */
+    public function nodeDataProvider(): array
+    {
+        return [
+            [
+                $this->valuesProvider(),
+                'foo',
+                $this->valuesProvider()['foo']
+            ],
+            [
+                $this->valuesProvider(),
+                'foo.baz',
+                $this->valuesProvider()['foo']['baz']
+            ],
+            [
+                $this->valuesProvider(),
+                'foo.bar',
+                []
+            ],
+            [
+                $this->valuesProvider(),
+                'invalid',
+                []
+            ]
+        ];
+    }
+
+    /**
+     * @param array  $data
      * @param string $pattern
      * @param string $replacement
      * @param array  $expected

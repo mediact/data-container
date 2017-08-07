@@ -154,6 +154,19 @@ trait DataContainerDecoratorTrait
     }
 
     /**
+     * Get a node from the container.
+     *
+     * @param string $path
+     *
+     * @return DataContainerInterface
+     */
+    public function node(string $path): DataContainerInterface
+    {
+        return $this->getStorage()
+            ->node($path);
+    }
+
+    /**
      * Copy paths matching a pattern to another path.
      *
      * @param string $pattern

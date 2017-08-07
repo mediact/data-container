@@ -113,6 +113,17 @@ foreach ($container->branch('categories.*') as $category) {
 }
 ```
 
+## Getting a node from the container with node()
+
+The node method returns a single container with the data from a path.
+
+```php
+<?php
+/** @var Mediact\DataContainer\DataContainer $container */
+$foo = $container->node('categories.foo');
+var_dump($foo->get('name')); // Foo
+```
+
 ## Copying data with copy()
 
 ```php
