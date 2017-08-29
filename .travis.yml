@@ -1,0 +1,11 @@
+language: php
+
+php:
+  - 7.0
+  - 7.1
+
+# execute any number of scripts before the test run, custom env's are available as variables
+before_script:
+  - composer install
+
+script: vendor/bin/phpunit --configuration phpunit.xml --coverage-text
