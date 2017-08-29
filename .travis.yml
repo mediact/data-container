@@ -6,6 +6,7 @@ php:
 
 # execute any number of scripts before the test run, custom env's are available as variables
 before_script:
+  - composer config --global github-protocols https
   - composer install --prefer-dist
 
 script: vendor/bin/phpunit --configuration phpunit.xml --coverage-text
