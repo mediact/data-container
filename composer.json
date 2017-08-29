@@ -13,12 +13,6 @@
       "role": "developer"
     }
   ],
-  "repositories": [
-    {
-      "type": "composer",
-      "url": "https://composer.mediact.nl"
-    }
-  ],
   "minimum-stability": "stable",
   "prefer-stable": true,
   "require": {
@@ -26,8 +20,7 @@
   },
   "require-dev": {
     "phpunit/phpunit": "@stable",
-    "kint-php/kint": "@stable",
-    "mediact/testing-suite": "@stable"
+    "kint-php/kint": "@stable"
   },
   "autoload": {
     "psr-4": {
