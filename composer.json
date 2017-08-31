@@ -13,33 +13,6 @@
       "role": "developer"
     }
   ],
-  "repositories": [
-    {
-      "type": "vcs",
-      "url": "https://github.com/mediact/testing-suite"
-    },
-    {
-      "type": "vcs",
-      "url": "https://github.com/mediact/coding-standard-phpstorm"
-    },
-    {
-      "type": "vcs",
-      "url": "https://github.com/mediact/coding-standard"
-    },
-    {
-      "type": "vcs",
-      "url": "https://github.com/mediact/composer-dependency-installer"
-    },
-    {
-      "type": "vcs",
-      "url": "https://github.com/mediact/composer-file-installer"
-    },
-    {
-      "type": "vcs",
-      "url": "https://github.com/mediact/file-mapping"
-    }
-
-  ],
   "minimum-stability": "stable",
   "prefer-stable": true,
   "require": {
