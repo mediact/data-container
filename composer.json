@@ -2,7 +2,7 @@
   "name": "mediact/data-container",
   "type": "library",
   "description": "Data container library",
-  "license": "proprietary",
+  "license": "MIT",
   "authors": [
     {
       "name": "Mediact",
@@ -11,12 +11,6 @@
     {
       "name": "Jan-Marten de Boer",
       "role": "developer"
-    }
-  ],
-  "repositories": [
-    {
-      "type": "composer",
-      "url": "https://composer.mediact.nl"
     }
   ],
   "minimum-stability": "stable",
