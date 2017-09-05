@@ -1,9 +1,9 @@
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/mediact/data-container/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/mediact/data-container/?branch=master)
+
 # Data Container
 
 This package provides a data container. A data container can contain any data.
 The data can be accessed using dot-notation.
-
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/mediact/data-container/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/mediact/data-container/?branch=master)
 
 # Installation
 
