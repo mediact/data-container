@@ -193,4 +193,14 @@ trait DataContainerDecoratorTrait
         $this->getStorage()
             ->move($pattern, $replacement);
     }
+
+    /**
+     * Prepare the object for cloning.
+     *
+     * @return void
+     */
+    public function __clone()
+    {
+        $this->storage = clone $this->storage;
+    }
 }

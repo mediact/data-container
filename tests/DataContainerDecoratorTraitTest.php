@@ -261,4 +261,28 @@ class DataContainerDecoratorTraitTest extends TestCase
         $double = new DataContainerImplementationDouble($storage);
         $double->move($pattern, $destination);
     }
+
+    /**
+     * @return void
+     *
+     * @covers ::__clone
+     */
+    public function testClone()
+    {
+        $set     = ['foo' => 'bar'];
+        $merged  = array_merge($set, ['baz' => 'qux']);
+        $storage = new DataContainer($set);
+        $double  = new DataContainerImplementationDouble($storage);
+        $clone   = clone $double;
+
+        // Assert that the original consecutively returns sets.
+        $this->assertEquals($set, $double->all());
+        $double->set('baz', 'qux');
+        $this->assertEquals($merged, $double->all());
+
+        // Then assert that the clone still consecutively returns the same sets.
+        $this->assertEquals($set, $clone->all());
+        $clone->set('baz', 'qux');
+        $this->assertEquals($merged, $clone->all());
+    }
 }
