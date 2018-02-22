@@ -278,7 +278,7 @@ class DataContainer implements DataContainerInterface
         $matchingKeys = array_filter(
             array_keys($data),
             function ($key) use ($pattern) {
-                return fnmatch($pattern, $key);
+                return fnmatch($pattern, $key, FNM_NOESCAPE);
             }
         );
 

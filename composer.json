@@ -1,53 +1,53 @@
 {
-  "name": "mediact/data-container",
-  "type": "library",
-  "description": "Data container library",
-  "license": "MIT",
-  "authors": [
-    {
-      "name": "Mediact",
-      "email": "contact@mediact.nl"
+    "name": "mediact/data-container",
+    "type": "library",
+    "description": "Data container library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Mediact",
+            "email": "contact@mediact.nl"
+        },
+        {
+            "name": "Jan-Marten de Boer",
+            "role": "developer"
+        }
+    ],
+    "minimum-stability": "stable",
+    "prefer-stable": true,
+    "require": {
+        "php": "^7.0"
     },
-    {
-      "name": "Jan-Marten de Boer",
-      "role": "developer"
+    "require-dev": {
+        "phpunit/phpunit": "@stable",
+        "kint-php/kint": "@stable",
+        "mediact/testing-suite": "@stable"
+    },
+    "autoload": {
+        "psr-4": {
+            "Mediact\\DataContainer\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Mediact\\DataContainer\\Tests\\": "tests/"
+        }
+    },
+    "archive": {
+        "exclude": [
+            "/bitbucket-pipelines.yml",
+            "/.gitignore",
+            "/phpunit.xml",
+            "/phpmd.xml",
+            "/phpcs.xml",
+            "/phpstan.neon",
+            "/tests",
+            "/example"
+        ]
+    },
+    "extra": {
+        "grumphp": {
+            "config-default-path": "vendor/mediact/testing-suite/config/default/grumphp.yml"
+        }
     }
-  ],
-  "minimum-stability": "stable",
-  "prefer-stable": true,
-  "require": {
-    "php": "^7.0"
-  },
-  "require-dev": {
-    "phpunit/phpunit": "@stable",
-    "kint-php/kint": "@stable",
-    "mediact/testing-suite": "@stable"
-  },
-  "autoload": {
-    "psr-4": {
-      "Mediact\\DataContainer\\": "src/"
-    }
-  },
-  "autoload-dev": {
-    "psr-4": {
-      "Mediact\\DataContainer\\Tests\\": "tests/"
-    }
-  },
-  "archive": {
-    "exclude": [
-      "bitbucket-pipelines.yml",
-      ".gitignore",
-      "phpunit.xml",
-      "phpmd.xml",
-      "phpcs.xml",
-      "phpstan.neon",
-      "tests",
-      "example"
-    ]
-  },
-  "extra": {
-    "grumphp": {
-      "config-default-path": "vendor/mediact/testing-suite/config/default/grumphp.yml"
-    }
-  }
 }

@@ -350,6 +350,18 @@ class DataContainerTest extends TestCase
                 $this->valuesProvider(),
                 'quux.*',
                 ['quux.0', 'quux.1', 'quux.2']
+            ],
+            // Assert glob does not escape paths.
+            [
+                [
+                    'models' => [
+                        'Foo\Bar\Baz' => [
+                            'qux' => 'quux'
+                        ]
+                    ]
+                ],
+                '*.Foo\Bar\*',
+                ['models.Foo\Bar\Baz']
             ]
         ];
     }
