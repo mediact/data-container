@@ -225,3 +225,35 @@ class FooTraversableDataContainer implements DataContainerInterface, IteratorAgg
     }
 }
 ```
+
+## Filtering a container
+
+To filter a container, an implementation of `DataContainerFilterInterface` is
+required.
+
+A default implementation, used for chaining, is available.
+
+```php
+<?php
+use Mediact\DataContainer\DataContainerFilterInterface;
+use Mediact\DataContainer\DataContainerFilterChain;
+use Mediact\DataContainer\DataContainerInterface;
+
+/**
+ * @var DataContainerFilterInterface $fooFilter
+ * @var DataContainerFilterInterface $barFilter
+ * @var DataContainerFilterInterface $bazFilter
+ * @var DataContainerInterface       $container
+ */
+
+$filter = new DataContainerFilterChain(
+    $fooFilter,
+    $barFilter,
+    $bazFilter
+);
+
+if ($filter($container)) {
+    // Proceed.
+    $container->move('foo', 'bar');
+}
+```
