@@ -377,8 +377,6 @@ class DataContainerTest extends TestCase
      * @dataProvider expandDataProvider
      *
      * @covers ::expand
-     * @covers ::replaceByRegex
-     * @covers ::getGlobRegex
      */
     public function testExpand(
         array $data,

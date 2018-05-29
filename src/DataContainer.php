@@ -11,6 +11,8 @@ namespace Mediact\DataContainer;
  */
 class DataContainer implements DataContainerInterface
 {
+    use ReplaceByPatternTrait;
+
     /** @var array */
     private $data;
 
@@ -128,12 +130,17 @@ class DataContainer implements DataContainerInterface
     public function expand(string $pattern, string $replacement): array
     {
         $matches = $this->glob($pattern);
-        $regex   = $this->getGlobRegex($pattern);
+
         return array_combine(
             $matches,
             array_map(
-                function ($match) use ($regex, $replacement) {
-                    return $this->replaceByRegex($regex, $match, $replacement);
+                function ($match) use ($pattern, $replacement) {
+                    return $this->replaceByPattern(
+                        $pattern,
+                        $match,
+                        $replacement,
+                        static::SEPARATOR
+                    );
                 },
                 $matches
             )
@@ -304,58 +311,5 @@ class DataContainer implements DataContainerInterface
         }
 
         return $paths;
-    }
-
-    /**
-     * Get a replacement for pattern that has been matched by glob.
-     *
-     * @param string $regex
-     * @param string $match
-     * @param string $replacement
-     *
-     * @return string
-     */
-    private function replaceByRegex(
-        string $regex,
-        string $match,
-        string $replacement
-    ): string {
-        if (preg_match($regex, $match, $matches)) {
-            $replacement = preg_replace_callback(
-                '/\$([\d]+)/',
-                function (array $match) use ($matches) {
-                    return array_key_exists($match[1], $matches)
-                        ? $matches[$match[1]]
-                        : $match[0];
-                },
-                $replacement
-            );
-        }
-
-        return $replacement;
-    }
-
-    /**
-     * Get regex pattern for a glob pattern.
-     *
-     * @param string $pattern
-     *
-     * @return string
-     */
-    private function getGlobRegex(
-        string $pattern
-    ): string {
-        $transforms = [
-            '\*'   => '([^' . preg_quote(static::SEPARATOR, '#') . ']*)',
-            '\?'   => '(.)',
-            '\[\!' => '([^',
-            '\['   => '([',
-            '\]'   => '])'
-        ];
-
-        return sprintf(
-            '#^%s$#',
-            strtr(preg_quote($pattern, '#'), $transforms)
-        );
     }
 }
