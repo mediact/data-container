@@ -33,8 +33,8 @@ class DataContainer implements DataContainerInterface
      */
     public function has(string $path): bool
     {
-        $random = md5(uniqid());
-        return $this->get($path, $random) !== $random;
+        $check = clone $this;
+        return $this->get($path, $check) !== $check;
     }
 
     /**
