@@ -6,10 +6,13 @@
 
 namespace Mediact\DataContainer;
 
+use ArrayIterator;
+use Traversable;
+
 /**
  * Contains any data which can be accessed using dot-notation.
  */
-class DataContainer implements DataContainerInterface
+class DataContainer implements IterableDataContainerInterface
 {
     use ReplaceByPatternTrait;
 
@@ -311,5 +314,15 @@ class DataContainer implements DataContainerInterface
         }
 
         return $paths;
+    }
+
+    /**
+     * Retrieve an external iterator.
+     *
+     * @return Traversable
+     */
+    public function getIterator(): Traversable
+    {
+        return new ArrayIterator($this->all());
     }
 }

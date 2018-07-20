@@ -49,5 +49,8 @@
         "grumphp": {
             "config-default-path": "vendor/mediact/testing-suite/config/default/grumphp.yml"
         }
+    },
+    "config": {
+        "sort-packages": true
     }
 }
