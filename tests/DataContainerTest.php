@@ -671,6 +671,31 @@ class DataContainerTest extends TestCase
         ];
     }
 
+    /**
+     * @param array $values
+     *
+     * @return void
+     *
+     * @covers ::getIterator
+     *
+     * @dataProvider getIteratorDataProvider
+     */
+    public function testGetIterator(array $values): void
+    {
+        $subject = new DataContainer($values);
+        $this->assertSame($values, iterator_to_array($subject->getIterator()));
+        $this->assertSame($values, iterator_to_array($subject));
+    }
+
+    /**
+     * @return array
+     */
+    public function getIteratorDataProvider(): array
+    {
+        return [
+            [$this->valuesProvider()]
+        ];
+    }
 
     /**
      * @return array
