@@ -234,6 +234,12 @@ class DataContainerTest extends TestCase
                 'quux.quuux.foo',
                 'new_value',
                 $valuesD
+            ],
+            [
+                $this->valuesProvider(),
+                '',
+                ['foo' => 'bar'],
+                ['foo' => 'bar']
             ]
         ];
     }
@@ -362,6 +368,12 @@ class DataContainerTest extends TestCase
                 ],
                 '*.Foo\Bar\*',
                 ['models.Foo\Bar\Baz']
+            ],
+            // Assert glob returns the root path when required.
+            [
+                ['foo' => 'bar'],
+                '',
+                ['']
             ]
         ];
     }
