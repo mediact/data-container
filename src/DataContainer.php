@@ -83,10 +83,15 @@ class DataContainer implements IterableDataContainerInterface
      */
     public function set(string $path, $value = null)
     {
-        $keys        = $this->parsePath($path);
-        $last        = array_pop($keys);
-        $node        =& $this->getNodeReference($keys);
-        $node[$last] = $value;
+        $keys = $this->parsePath($path);
+        $last = array_pop($keys);
+        $node =& $this->getNodeReference($keys);
+
+        if (strlen($last) > 0) {
+            $node[$last] = $value;
+        } else {
+            $node = $value;
+        }
     }
 
     /**
