@@ -120,11 +120,13 @@ class DataContainer implements IterableDataContainerInterface
      */
     public function glob(string $pattern): array
     {
-        return $this->findArrayPathsByPatterns(
-            $this->data,
-            explode(static::SEPARATOR, $pattern),
-            ''
-        );
+        return $pattern === ''
+            ? [$pattern]
+            : $this->findArrayPathsByPatterns(
+                $this->data,
+                explode(static::SEPARATOR, $pattern),
+                ''
+            );
     }
 
     /**
