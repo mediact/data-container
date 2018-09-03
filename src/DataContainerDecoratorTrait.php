@@ -6,6 +6,8 @@
 
 namespace Mediact\DataContainer;
 
+use Traversable;
+
 /**
  * Implements DataContainerInterface
  */
@@ -192,6 +194,17 @@ trait DataContainerDecoratorTrait
     {
         $this->getStorage()
             ->move($pattern, $replacement);
+    }
+
+    /**
+     * Retrieve an external iterator.
+     *
+     * @return Traversable
+     */
+    public function getIterator(): Traversable
+    {
+        return $this->getStorage()
+            ->getIterator();
     }
 
     /**
