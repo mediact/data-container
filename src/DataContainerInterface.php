@@ -6,10 +6,12 @@
 
 namespace Mediact\DataContainer;
 
+use IteratorAggregate;
+
 /**
  * Contains any data which can be accessed using dot-notation.
  */
-interface DataContainerInterface
+interface DataContainerInterface extends IteratorAggregate
 {
     /**
      * The separator used in paths.
