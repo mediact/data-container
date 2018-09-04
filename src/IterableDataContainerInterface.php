@@ -6,12 +6,13 @@
 
 namespace Mediact\DataContainer;
 
-use IteratorAggregate;
 use Traversable;
 
+/**
+ * @deprecated DataContainerInterface is iterable.
+ */
 interface IterableDataContainerInterface extends
-    DataContainerInterface,
-    IteratorAggregate
+    DataContainerInterface
 {
     /**
      * Retrieve an external iterator.

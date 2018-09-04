@@ -11,6 +11,8 @@ use Traversable;
 
 /**
  * Implements IteratorAggregate
+ *
+ * @deprecated IteratorAggregate is implemented by DataContainerDecoratorTrait.
  */
 trait DataContainerIteratorAggregateTrait
 {

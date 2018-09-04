@@ -12,10 +12,9 @@ use Mediact\DataContainer\DataContainerDecoratorTrait;
 use Mediact\DataContainer\DataContainerInterface;
 use Mediact\DataContainer\DataContainerIteratorAggregateTrait;
 
-class DataContainerImplementationDouble implements DataContainerInterface, IteratorAggregate
+class DataContainerImplementationDouble implements DataContainerInterface
 {
     use DataContainerDecoratorTrait;
-    use DataContainerIteratorAggregateTrait;
 
     /**
      * Constructor.

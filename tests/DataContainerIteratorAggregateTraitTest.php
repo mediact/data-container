@@ -6,8 +6,9 @@
 
 namespace Mediact\DataContainer\Tests;
 
+use IteratorAggregate;
 use Mediact\DataContainer\DataContainerInterface;
-use Mediact\DataContainer\Tests\TestDouble\DataContainerImplementationDouble;
+use Mediact\DataContainer\DataContainerIteratorAggregateTrait;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -30,7 +31,34 @@ class DataContainerIteratorAggregateTraitTest extends TestCase
             ->method('all')
             ->willReturn($data);
 
-        $double = new DataContainerImplementationDouble($storage);
+        $double = new class ($storage) implements IteratorAggregate
+        {
+            use DataContainerIteratorAggregateTrait;
+
+            /** @var DataContainerInterface */
+            private $storage;
+
+            /**
+             * Constructor.
+             *
+             * @param DataContainerInterface $storage
+             */
+            public function __construct(DataContainerInterface $storage)
+            {
+                $this->storage = $storage;
+            }
+
+            /**
+             * Get the storage.
+             *
+             * @return DataContainerInterface
+             */
+            protected function getStorage(): DataContainerInterface
+            {
+                return $this->storage;
+            }
+        };
+
         $this->assertEquals($data, iterator_to_array($double));
     }
 }

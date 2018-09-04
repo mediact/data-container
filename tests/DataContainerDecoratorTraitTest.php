@@ -6,6 +6,7 @@
 
 namespace Mediact\DataContainer\Tests;
 
+use ArrayIterator;
 use Mediact\DataContainer\DataContainer;
 use Mediact\DataContainer\DataContainerInterface;
 use Mediact\DataContainer\Tests\TestDouble\DataContainerImplementationDouble;
@@ -260,6 +261,26 @@ class DataContainerDecoratorTraitTest extends TestCase
 
         $double = new DataContainerImplementationDouble($storage);
         $double->move($pattern, $destination);
+    }
+
+    /**
+     * @return void
+     *
+     * @covers ::getIterator
+     */
+    public function testGetIterator()
+    {
+        $data     = ['some_data'];
+        $iterator = new ArrayIterator($data);
+        $storage  = $this->createMock(DataContainerInterface::class);
+
+        $storage
+            ->expects(self::once())
+            ->method('getIterator')
+            ->willReturn($iterator);
+
+        $double = new DataContainerImplementationDouble($storage);
+        $this->assertSame($data, iterator_to_array($double));
     }
 
     /**
