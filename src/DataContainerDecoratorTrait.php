@@ -25,11 +25,7 @@ trait DataContainerDecoratorTrait
      */
     protected function setData(iterable $data)
     {
-        $this->storage = new DataContainer(
-            $data instanceof Traversable
-                ? iterator_to_array($data)
-                : $data
-        );
+        $this->storage = new DataContainer($data);
     }
 
     /**

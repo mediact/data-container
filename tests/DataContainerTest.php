@@ -6,6 +6,7 @@
 
 namespace Mediact\DataContainer\Tests;
 
+use ArrayIterator;
 use Mediact\DataContainer\DataContainer;
 use Mediact\DataContainer\DataContainerInterface;
 use PHPUnit\Framework\TestCase;
@@ -158,11 +159,28 @@ class DataContainerTest extends TestCase
      *
      * @dataProvider allDataProvider
      *
+     * @covers ::__construct
      * @covers ::all
      */
     public function testAll(array $data)
     {
         $container = new DataContainer($data);
+        $this->assertEquals($data, $container->all());
+    }
+
+    /**
+     * @param array $data
+     *
+     * @return void
+     *
+     * @dataProvider allDataProvider
+     *
+     * @covers ::__construct
+     * @covers ::all
+     */
+    public function testAllIterable(array $data)
+    {
+        $container = new DataContainer(new ArrayIterator($data));
         $this->assertEquals($data, $container->all());
     }
 
