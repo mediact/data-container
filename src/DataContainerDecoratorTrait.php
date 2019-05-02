@@ -19,11 +19,11 @@ trait DataContainerDecoratorTrait
     /**
      * Set data on a new storage.
      *
-     * @param array $data
+     * @param iterable $data
      *
      * @return void
      */
-    protected function setData(array $data)
+    protected function setData(iterable $data)
     {
         $this->storage = new DataContainer($data);
     }

@@ -27,11 +27,11 @@ class DataContainerImplementationDouble implements DataContainerInterface
     }
 
     /**
-     * @param array $data
+     * @param iterable $data
      *
      * @return void
      */
-    public function pokeData(array $data)
+    public function pokeData(iterable $data)
     {
         $this->setData($data);
     }

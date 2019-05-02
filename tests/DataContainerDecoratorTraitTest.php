@@ -37,6 +37,23 @@ class DataContainerDecoratorTraitTest extends TestCase
     /**
      * @return void
      *
+     * @covers ::setData
+     */
+    public function testSetDataTraversable()
+    {
+        $data = new ArrayIterator(['some_data']);
+
+        $double = new DataContainerImplementationDouble();
+        $double->pokeData($data);
+        $this->assertEquals(
+            iterator_to_array($data),
+            $double->peekStorage()->all()
+        );
+    }
+
+    /**
+     * @return void
+     *
      * @covers ::setStorage
      * @covers ::getStorage
      */

@@ -23,6 +23,7 @@ class PatternReplacerTest extends TestCase
      *
      * @return void
      *
+     * @covers ::__construct
      * @covers ::replace
      *
      * @dataProvider dataProvider

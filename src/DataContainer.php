@@ -24,9 +24,11 @@ class DataContainer implements IterableDataContainerInterface
      *
      * @param array $data
      */
-    public function __construct(array $data = [])
+    public function __construct(iterable $data = [])
     {
-        $this->data = $data;
+        $this->data = $data instanceof Traversable
+            ? iterator_to_array($data)
+            : $data;
     }
 
     /**
