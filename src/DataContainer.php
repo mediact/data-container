@@ -127,7 +127,12 @@ class DataContainer implements IterableDataContainerInterface
             ? [$pattern]
             : $this->findArrayPathsByPatterns(
                 $this->data,
-                explode(static::SEPARATOR, $pattern),
+                array_map(
+                    function (string $part): string {
+                        return trim($part, static::ENCLOSURE);
+                    },
+                    str_getcsv($pattern, static::SEPARATOR, static::ENCLOSURE, static::ESCAPE)
+                ),
                 ''
             );
     }
@@ -251,7 +256,10 @@ class DataContainer implements IterableDataContainerInterface
                     ? intval($key)
                     : $key;
             },
-            array_filter(explode(static::SEPARATOR, $path), 'strlen')
+            array_filter(
+                str_getcsv($path, static::SEPARATOR, static::ENCLOSURE, static::ESCAPE),
+                'strlen'
+            )
         );
     }
 
@@ -305,8 +313,7 @@ class DataContainer implements IterableDataContainerInterface
 
         $paths = [];
         foreach ($matchingKeys as $key) {
-            $path = $prefix . $key;
-
+            $path = $prefix . $this->enclose($key);
             if (count($patterns) === 0) {
                 $paths[] = $path;
                 continue;
@@ -325,6 +332,29 @@ class DataContainer implements IterableDataContainerInterface
         }
 
         return $paths;
+    }
+
+    /**
+     * Enclose a key if it contains the separator.
+     *
+     * @param string $key
+     *
+     * @return string
+     */
+    private function enclose(string $key): string
+    {
+        return strpos($key, static::SEPARATOR) !== false
+            ? sprintf(
+                '%s%s%s',
+                static::ENCLOSURE,
+                str_replace(
+                    static::ENCLOSURE,
+                    static::ESCAPE . static::ENCLOSURE,
+                    $key
+                ),
+                static::ENCLOSURE
+            )
+            : $key;
     }
 
     /**

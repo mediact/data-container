@@ -18,6 +18,8 @@ interface DataContainerInterface extends IteratorAggregate
      * The separator used in paths.
      */
     public const SEPARATOR = '.';
+    public const ENCLOSURE = '"';
+    public const ESCAPE    = '\\';
 
     /**
      * Check whether a path exists.
