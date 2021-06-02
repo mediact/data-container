@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright MediaCT. All rights reserved.
  * https://www.mediact.nl
@@ -24,7 +25,7 @@ class DataContainer implements IterableDataContainerInterface
      *
      * @param array $data
      */
-    public function __construct(iterable $data = [])
+    final public function __construct(iterable $data = [])
     {
         $this->data = $data instanceof Traversable
             ? iterator_to_array($data)
@@ -169,11 +170,11 @@ class DataContainer implements IterableDataContainerInterface
     public function branch(string $pattern): array
     {
         return array_map(
-            function (array $data) : DataContainerInterface {
+            function (array $data): DataContainerInterface {
                 return new static($data);
             },
             array_map(
-                function (string $path) : array {
+                function (string $path): array {
                     return (array) $this->get($path, []);
                 },
                 $this->glob($pattern)
@@ -265,9 +266,10 @@ class DataContainer implements IterableDataContainerInterface
     {
         $current =& $this->data;
 
-        while (count($keys)) {
+        while (!empty($keys)) {
             $key = array_shift($keys);
-            if (!array_key_exists($key, $current)
+            if (
+                !array_key_exists($key, $current)
                 || !is_array($current[$key])
             ) {
                 $current[$key] = [];

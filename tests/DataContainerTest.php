@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright MediaCT. All rights reserved.
  * https://www.mediact.nl
@@ -480,7 +481,7 @@ class DataContainerTest extends TestCase
         $this->assertEquals(
             $expected,
             array_map(
-                function (DataContainerInterface $branch) : array {
+                function (DataContainerInterface $branch): array {
                     return $branch->all();
                 },
                 $result

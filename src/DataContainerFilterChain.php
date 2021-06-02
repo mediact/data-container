@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright MediaCT. All rights reserved.
  * https://www.mediact.nl
@@ -37,7 +38,7 @@ class DataContainerFilterChain implements DataContainerFilterInterface
                 DataContainerFilterInterface $filter
             ) use (
                 $container
-            ) : bool {
+            ): bool {
                 return $carry && $filter($container);
             },
             true

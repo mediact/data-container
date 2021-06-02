@@ -42,13 +42,10 @@
             "/phpcs.xml",
             "/phpstan.neon",
             "/tests",
-            "/example"
+            "/example",
+            "/grumphp.yml",
+            "/pdepend.xml"
         ]
-    },
-    "extra": {
-        "grumphp": {
-            "config-default-path": "vendor/mediact/testing-suite/config/default/grumphp.yml"
-        }
     },
     "config": {
         "sort-packages": true
