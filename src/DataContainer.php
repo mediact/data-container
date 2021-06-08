@@ -16,6 +16,8 @@ use Traversable;
 class DataContainer implements IterableDataContainerInterface
 {
     use ReplaceByPatternTrait;
+    use PathParserTrait;
+    use KeyQuoterTrait;
 
     /** @var array */
     private $data;
@@ -127,12 +129,7 @@ class DataContainer implements IterableDataContainerInterface
             ? [$pattern]
             : $this->findArrayPathsByPatterns(
                 $this->data,
-                array_map(
-                    function (string $part): string {
-                        return trim($part, static::ENCLOSURE);
-                    },
-                    str_getcsv($pattern, static::SEPARATOR, static::ENCLOSURE, static::ESCAPE)
-                ),
+                $this->parsePath($pattern),
                 ''
             );
     }
@@ -242,28 +239,6 @@ class DataContainer implements IterableDataContainerInterface
     }
 
     /**
-     * Parse a path into an array.
-     *
-     * @param string $path
-     *
-     * @return array
-     */
-    private function parsePath(string $path): array
-    {
-        return array_map(
-            function (string $key) {
-                return ctype_digit($key)
-                    ? intval($key)
-                    : $key;
-            },
-            array_filter(
-                str_getcsv($path, static::SEPARATOR, static::ENCLOSURE, static::ESCAPE),
-                'strlen'
-            )
-        );
-    }
-
-    /**
      * Get reference to a data node, create it if it does not exist.
      *
      * @param array $keys
@@ -313,7 +288,7 @@ class DataContainer implements IterableDataContainerInterface
 
         $paths = [];
         foreach ($matchingKeys as $key) {
-            $path = $prefix . $this->enclose($key);
+            $path = $prefix . $this->quoteKey($key);
             if (count($patterns) === 0) {
                 $paths[] = $path;
                 continue;
@@ -332,29 +307,6 @@ class DataContainer implements IterableDataContainerInterface
         }
 
         return $paths;
-    }
-
-    /**
-     * Enclose a key if it contains the separator.
-     *
-     * @param string $key
-     *
-     * @return string
-     */
-    private function enclose(string $key): string
-    {
-        return strpos($key, static::SEPARATOR) !== false
-            ? sprintf(
-                '%s%s%s',
-                static::ENCLOSURE,
-                str_replace(
-                    static::ENCLOSURE,
-                    static::ESCAPE . static::ENCLOSURE,
-                    $key
-                ),
-                static::ENCLOSURE
-            )
-            : $key;
     }
 
     /**

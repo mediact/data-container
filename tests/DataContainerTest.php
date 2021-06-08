@@ -42,7 +42,6 @@ class DataContainerTest extends TestCase
      * @dataProvider hasDataProvider
      *
      * @covers ::has
-     * @covers ::parsePath
      */
     public function testHas(array $data, string $path, bool $expected)
     {
@@ -105,7 +104,6 @@ class DataContainerTest extends TestCase
      * @dataProvider getDataProvider
      *
      * @covers ::get
-     * @covers ::parsePath
      */
     public function testGet(array $data, string $path, $default, $expected)
     {
@@ -291,7 +289,6 @@ class DataContainerTest extends TestCase
      * @dataProvider removeDataProvider
      *
      * @covers ::remove
-     * @covers ::enclose
      * @covers ::getNodeReference
      */
     public function testRemove(array $data, string $pattern, array $expected)
