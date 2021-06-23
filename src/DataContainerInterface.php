@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright MediaCT. All rights reserved.
  * https://www.mediact.nl
@@ -16,7 +17,9 @@ interface DataContainerInterface extends IteratorAggregate
     /**
      * The separator used in paths.
      */
-    const SEPARATOR = '.';
+    public const SEPARATOR = '.';
+    public const ENCLOSURE = '"';
+    public const ESCAPE    = '\\';
 
     /**
      * Check whether a path exists.

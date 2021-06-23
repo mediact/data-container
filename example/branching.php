@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright MediaCT. All rights reserved.
  * https://www.mediact.nl
@@ -20,5 +21,5 @@ $container = $factory->create(
 );
 
 foreach ($container->branch('categories.*') as $category) {
-    var_dump($category->get('name'));
+    print_r($category->get('name'));
 }

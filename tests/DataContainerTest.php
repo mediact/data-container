@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright MediaCT. All rights reserved.
  * https://www.mediact.nl
@@ -41,7 +42,6 @@ class DataContainerTest extends TestCase
      * @dataProvider hasDataProvider
      *
      * @covers ::has
-     * @covers ::parsePath
      */
     public function testHas(array $data, string $path, bool $expected)
     {
@@ -63,6 +63,11 @@ class DataContainerTest extends TestCase
             [
                 $this->valuesProvider(),
                 'foo.baz.qux',
+                true
+            ],
+            [
+                $this->valuesProvider(),
+                '"baz.a"',
                 true
             ],
             [
@@ -99,7 +104,6 @@ class DataContainerTest extends TestCase
      * @dataProvider getDataProvider
      *
      * @covers ::get
-     * @covers ::parsePath
      */
     public function testGet(array $data, string $path, $default, $expected)
     {
@@ -136,6 +140,12 @@ class DataContainerTest extends TestCase
                 'foo.baz.quuux',
                 'some_default',
                 'some_default'
+            ],
+            [
+                $this->valuesProvider(),
+                '"baz.a"',
+                'some_default',
+                'baz_a_value'
             ],
             [
                 [],
@@ -221,12 +231,13 @@ class DataContainerTest extends TestCase
      */
     public function setDataProvider(): array
     {
-        $valuesA = $valuesB = $valuesC = $valuesD = $this->valuesProvider();
+        $valuesA = $valuesB = $valuesC = $valuesD = $valuesE = $this->valuesProvider();
 
         $valuesA['foo']                   = 'new_value';
         $valuesB['foo']['baz']['qux']     = 'new_value';
         $valuesC['foo']['baz']['quux'][1] = 'new_value';
         $valuesD['quux']['quuux']['foo']  = 'new_value';
+        $valuesE['quux']['baz.a']['foo']  = 'new_value';
 
         return [
             [
@@ -252,6 +263,12 @@ class DataContainerTest extends TestCase
                 'quux.quuux.foo',
                 'new_value',
                 $valuesD
+            ],
+            [
+                $this->valuesProvider(),
+                'quux."baz.a".foo',
+                'new_value',
+                $valuesE
             ],
             [
                 $this->valuesProvider(),
@@ -286,12 +303,13 @@ class DataContainerTest extends TestCase
      */
     public function removeDataProvider(): array
     {
-        $valuesA = $valuesB = $valuesC = $valuesD = $this->valuesProvider();
+        $valuesA = $valuesB = $valuesC = $valuesD = $valuesE = $this->valuesProvider();
 
         unset($valuesA['foo']);
         unset($valuesB['foo']['baz']['qux']);
         unset($valuesB['foo']['baz']['quux']);
         unset($valuesC['foo']['baz']['quux'][1]);
+        unset($valuesE['baz.a']);
 
         return [
             [
@@ -313,6 +331,11 @@ class DataContainerTest extends TestCase
                 $this->valuesProvider(),
                 'quux.quuux.foo',
                 $valuesD
+            ],
+            [
+                $this->valuesProvider(),
+                '"baz.a"',
+                $valuesE
             ]
         ];
     }
@@ -353,7 +376,7 @@ class DataContainerTest extends TestCase
             [
                 $this->valuesProvider(),
                 '*',
-                ['foo', 'bar', 'baz', 'qux', 'quux']
+                ['foo', 'bar', 'baz', '"baz.a"', 'qux', 'quux']
             ],
             [
                 $this->valuesProvider(),
@@ -456,6 +479,12 @@ class DataContainerTest extends TestCase
                 'foo.*',
                 'qux.$0',
                 ['foo.bar' => 'qux.foo.bar', 'foo.baz' => 'qux.foo.baz']
+            ],
+            [
+                $this->valuesProvider(),
+                '"b*.a"',
+                'b$1',
+                ['"baz.a"' => 'baz']
             ]
         ];
     }
@@ -480,7 +509,7 @@ class DataContainerTest extends TestCase
         $this->assertEquals(
             $expected,
             array_map(
-                function (DataContainerInterface $branch) : array {
+                function (DataContainerInterface $branch): array {
                     return $branch->all();
                 },
                 $result
@@ -749,6 +778,7 @@ class DataContainerTest extends TestCase
                 'qux' => 'bar_qux_value'
             ],
             'baz' => 'baz_value',
+            "baz.a" => "baz_a_value",
             'qux' => null,
             'quux' => [
                 'foo',

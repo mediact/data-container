@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright MediaCT. All rights reserved.
  * https://www.mediact.nl
@@ -15,6 +16,8 @@ use Traversable;
 class DataContainer implements IterableDataContainerInterface
 {
     use ReplaceByPatternTrait;
+    use PathParserTrait;
+    use KeyQuoterTrait;
 
     /** @var array */
     private $data;
@@ -24,7 +27,7 @@ class DataContainer implements IterableDataContainerInterface
      *
      * @param array $data
      */
-    public function __construct(iterable $data = [])
+    final public function __construct(iterable $data = [])
     {
         $this->data = $data instanceof Traversable
             ? iterator_to_array($data)
@@ -126,7 +129,7 @@ class DataContainer implements IterableDataContainerInterface
             ? [$pattern]
             : $this->findArrayPathsByPatterns(
                 $this->data,
-                explode(static::SEPARATOR, $pattern),
+                $this->parsePath($pattern),
                 ''
             );
     }
@@ -169,11 +172,11 @@ class DataContainer implements IterableDataContainerInterface
     public function branch(string $pattern): array
     {
         return array_map(
-            function (array $data) : DataContainerInterface {
+            function (array $data): DataContainerInterface {
                 return new static($data);
             },
             array_map(
-                function (string $path) : array {
+                function (string $path): array {
                     return (array) $this->get($path, []);
                 },
                 $this->glob($pattern)
@@ -236,25 +239,6 @@ class DataContainer implements IterableDataContainerInterface
     }
 
     /**
-     * Parse a path into an array.
-     *
-     * @param string $path
-     *
-     * @return array
-     */
-    private function parsePath(string $path): array
-    {
-        return array_map(
-            function (string $key) {
-                return ctype_digit($key)
-                    ? intval($key)
-                    : $key;
-            },
-            array_filter(explode(static::SEPARATOR, $path), 'strlen')
-        );
-    }
-
-    /**
      * Get reference to a data node, create it if it does not exist.
      *
      * @param array $keys
@@ -265,9 +249,10 @@ class DataContainer implements IterableDataContainerInterface
     {
         $current =& $this->data;
 
-        while (count($keys)) {
+        while (!empty($keys)) {
             $key = array_shift($keys);
-            if (!array_key_exists($key, $current)
+            if (
+                !array_key_exists($key, $current)
                 || !is_array($current[$key])
             ) {
                 $current[$key] = [];
@@ -303,8 +288,7 @@ class DataContainer implements IterableDataContainerInterface
 
         $paths = [];
         foreach ($matchingKeys as $key) {
-            $path = $prefix . $key;
-
+            $path = $prefix . $this->quoteKey($key);
             if (count($patterns) === 0) {
                 $paths[] = $path;
                 continue;
