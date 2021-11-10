@@ -20,7 +20,7 @@ trait PathParserTrait
     {
         return array_map(
             function (string $key) {
-                return ctype_digit($key)
+                return ctype_digit($key) && (strlen($key) === 1 || substr($key, 0, 1) !== "0")
                     ? intval($key)
                     : $key;
             },

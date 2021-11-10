@@ -75,7 +75,35 @@ class PathParserTraitTest extends TestCase
             [
                 '$path'     => '"fo""o".."baz.a"..',
                 '$expected' => ['fo"o', 'baz.a']
-            ]
+            ],
+            [
+                '$path'     => 'foo.000',
+                '$expected' => ['foo', '000'],
+            ],
+            [
+                '$path'     => 'foo.0001',
+                '$expected' => ['foo', '0001'],
+            ],
+            [
+                '$path'     => 'foo.0001.bar',
+                '$expected' => ['foo', '0001', 'bar'],
+            ],
+            [
+                '$path'     => 'foo.0',
+                '$expected' => ['foo', 0],
+            ],
+            [
+                '$path'     => 'foo.0.bar',
+                '$expected' => ['foo', 0, 'bar'],
+            ],
+            [
+                '$path'     => 'foo.1000',
+                '$expected' => ['foo', 1000],
+            ],
+            [
+                '$path'     => 'foo.1001',
+                '$expected' => ['foo', 1001],
+            ],
         ];
     }
 }
