@@ -8,6 +8,7 @@
 namespace Mediact\DataContainer;
 
 use IteratorAggregate;
+use Traversable;
 
 /**
  * Contains any data which can be accessed using dot-notation.
@@ -122,4 +123,11 @@ interface DataContainerInterface extends IteratorAggregate
      * @return void
      */
     public function move(string $pattern, string $replacement);
+
+    /**
+     * Retrieve an external iterator.
+     *
+     * @return Traversable
+     */
+    public function getIterator(): Traversable;
 }
