@@ -13,6 +13,7 @@
             "role": "developer"
         }
     ],
+    "abandoned": true,
     "minimum-stability": "stable",
     "prefer-stable": true,
     "require": {

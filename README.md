@@ -1,3 +1,9 @@
+# Abandoned
+
+This package is abandoned. To select data based on a pattern we recommend using
+[JMESPath](https://jmespath.org/). To find paths that match a pattern (glob) and
+to update those paths (set) we don't have a clear alternative.
+
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/mediact/data-container/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/mediact/data-container/?branch=master)
 
 # Data Container
